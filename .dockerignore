@@ -1,0 +1,11 @@
+node_modules
+npm-debug.log
+dist
+.git
+.gitignore
+.devcontainer
+.vscode
+.env
+.env.example
+README.md 
+LICENSE.md

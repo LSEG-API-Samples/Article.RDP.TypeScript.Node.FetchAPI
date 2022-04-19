@@ -1,0 +1,15 @@
+// For format details, see https://aka.ms/devcontainer.json. For config options, see the README at:
+// https://github.com/microsoft/vscode-dev-containers/tree/v0.202.5/containers/
+{
+	"name": "test_node",
+	//"image": "node:17.5.0",
+	"build": {"dockerfile": "Dockerfile"},
+	"runArgs": [
+        "--env-file=.devcontainer/.env.devcontainer"
+    ],
+	"mounts": [
+		"source=${localWorkspaceFolder}/.vscode,target=${containerWorkspaceFolder}/.vscode,type=bind,consistency=cached",
+		"source=${localWorkspaceFolder}/code,target=${containerWorkspaceFolder}/code,type=bind,consistency=cached"
+	],
+	"shutdownAction":"stopContainer"
+}
