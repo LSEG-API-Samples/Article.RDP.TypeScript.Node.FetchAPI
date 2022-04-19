@@ -4,3 +4,4 @@ dist/
 .devcontainer/.env.devcontainer
 code/test.js
 code/testBase64.ts
+code/testYargs.ts

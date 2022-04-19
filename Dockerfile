@@ -14,7 +14,7 @@ COPY tsconfig.json .
 COPY code ./code
 #RUN npm install
 RUN npm install -g npm@8.7.0 \
-    && npm ci \
+    && npm install \
     && npm cache clean --force
 # Build app
 RUN npm run build
@@ -26,9 +26,9 @@ FROM node:17.5.0-alpine
 # Create app directory
 WORKDIR /app
 # Copy the bundle file and run script
-
 COPY --from=builder /app/dist ./dist
 
-CMD [ "node", "--experimental-fetch", "./dist/rdp_nodefetch.js"]
+ENTRYPOINT [ "node", "--experimental-fetch", "./dist/rdp_nodefetch.js"]
+#ENTRYPOINT [ "node" ,"./dist/testYargs.js""]
 # Set Docker to start bash
 #CMD /bin/bash

@@ -20,3 +20,5 @@ docker rm testfetch
 
 docker rmi testfetch
 ```
+
+start": "node --experimental-fetch ./dist/rdp_nodefetch.js"

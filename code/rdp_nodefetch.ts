@@ -7,10 +7,12 @@
 
 // Example Code Disclaimer:
 // ALL EXAMPLE CODE IS PROVIDED ON AN “AS IS” AND “AS AVAILABLE” BASIS FOR ILLUSTRATIVE PURPOSES ONLY. REFINITIV MAKES NO REPRESENTATIONS OR WARRANTIES OF ANY KIND, EXPRESS OR IMPLIED, AS TO THE OPERATION OF THE EXAMPLE CODE, OR THE INFORMATION, CONTENT, OR MATERIALS USED IN CONNECTION WITH THE EXAMPLE CODE. YOU EXPRESSLY AGREE THAT YOUR USE OF THE EXAMPLE CODE IS AT YOUR SOLE RISK.
+const {hideBin} = require('yargs/helpers')
+const yargs = require('yargs/yargs')
 
-import { RDP_AuthToken_Type } from './rdp_types'
-import {PDP_Symbology_Req_Type} from './rdp_types'
-import {RDP_AuthRevoke_Type} from './rdp_types'
+import { RDP_AuthToken_Type} from './rdp_types'
+import { PDP_Symbology_Req_Type} from './rdp_types'
+import { RDP_AuthRevoke_Type} from './rdp_types'
 
 
 const rdpServer: string = process.env.RDP_BASE_URL || 'https://api.refinitiv.com'
@@ -27,7 +29,7 @@ const password: string = process.env.RDP_PASSWORD || ''
 const client_id: string = process.env.RDP_APP_KEY || ''
 
 const scope: string = 'trapi'
-const takeExclusiveSignOnControl:boolean = true
+const takeExclusiveSignOnControl: boolean = true
 let access_token: string = ''
 let refresh_token: string = ''
 let expires_in: string = ''
@@ -35,7 +37,7 @@ let expires_in: string = ''
 let symbol: string = 'IBM.N'
 
 //const authenRDP = async (opt:RDP_AuthToken_Type) =>{
-const authenRDP = async (_username: string, _password: string, _clientid:string, _refresh_token:string) =>{
+const authenRDP = async (_username: string, _password: string, _clientid: string, _refresh_token: string) => {
     const authenURL: string = `${rdpServer}${rdpAuthURL}`
 
     let authReq: RDP_AuthToken_Type = {
@@ -45,12 +47,12 @@ const authenRDP = async (_username: string, _password: string, _clientid:string,
         'scope': scope,
         //'takeExclusiveSignOnControl': String(takeExclusiveSignOnControl),
         takeExclusiveSignOnControl,
-        'grant_type' : 'password',
+        'grant_type': 'password',
     }
 
-    if (_refresh_token.length !==0){
+    if (_refresh_token.length !== 0) {
         authReq['refresh_token'] = _refresh_token,
-        authReq['grant_type'] = 'refresh_token'
+            authReq['grant_type'] = 'refresh_token'
         delete authReq['scope']
         delete authReq['password']
     }
@@ -76,16 +78,16 @@ const authenRDP = async (_username: string, _password: string, _clientid:string,
     access_token = authResponse.access_token
     refresh_token = authResponse.refresh_token
     expires_in = authResponse.expires_in
-     // Define the timer to refresh our token 
+    // Define the timer to refresh our token 
     setRefreshTime()
 
 }
 
-const revokeRDPAuthen =async (access_token:string, _clientid:string) => {
+const revokeRDPAuthen = async (access_token: string, _clientid: string) => {
 
     const authenURL = `${rdpServer}${rdpAuthRevokeURL}`
 
-    const authReq:RDP_AuthRevoke_Type = {
+    const authReq: RDP_AuthRevoke_Type = {
         'token': access_token
     }
 
@@ -106,13 +108,13 @@ const revokeRDPAuthen =async (access_token:string, _clientid:string) => {
     }
 
     console.log('Authentication Revoked')
-    
+
 }
 
-const setRefreshTime = () =>{
-    
+const setRefreshTime = () => {
+
     const millis: number = (parseInt(expires_in) * 0.90) * 1000
-    
+
     setInterval(async () => {
         try {
             await authenRDP(username, password, client_id, refresh_token)
@@ -122,22 +124,18 @@ const setRefreshTime = () =>{
     }, millis)
 }
 
-const requestSymbol = async (symbol:string, access_token:string) =>{
-    const symbologyURL:string = `${rdpServer}${rdpSymbologyURL}`
+const requestSymbol = async (symbol: string, access_token: string) => {
+    const symbologyURL: string = `${rdpServer}${rdpSymbologyURL}`
 
     const reqSymbolObj: PDP_Symbology_Req_Type = {
-        'from': [
-            {
-                'identifierTypes': ['RIC'],
-                'values': [symbol]
-            }
-        ],
-        'to': [
-            {
-                'identifierTypes': ['ISIN','LEI','ExchangeTicker']
-            }
-        ],
-        'reference': ['name','status','classification'],
+        'from': [{
+            'identifierTypes': ['RIC'],
+            'values': [symbol]
+        }],
+        'to': [{
+            'identifierTypes': ['ISIN', 'LEI', 'ExchangeTicker']
+        }],
+        'reference': ['name', 'status', 'classification'],
         'type': 'auto'
     }
 
@@ -159,11 +157,11 @@ const requestSymbol = async (symbol:string, access_token:string) =>{
     return await response.json()
 }
 
-const requestESG = async (symbol:string, access_token:string) =>{
-    const esgURL:string = `${rdpServer}${rdpESGURL}?universe=${symbol}`
+const requestESG = async (symbol: string, access_token: string) => {
+    const esgURL: string = `${rdpServer}${rdpESGURL}?universe=${symbol}`
 
-     // Send HTTP Request
-     const response: Response = await fetch(esgURL, {
+    // Send HTTP Request
+    const response: Response = await fetch(esgURL, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
@@ -183,26 +181,41 @@ const requestESG = async (symbol:string, access_token:string) =>{
 process.on('SIGINT', async () => {
     console.log('Gracefully shutting down from Ctrl+C, calling RDP API Revoke service');
 
-    try{
+    try {
 
         await revokeRDPAuthen(access_token, refresh_token)
 
         // Waiting time for clean WebSocket connection
-        setTimeout(()=>{
+        setTimeout(() => {
             //graceful shutdown
             process.exit();
         }, 1000);
 
-    }catch (error) {
+    } catch (error) {
         console.log(error)
-    } 
-  
+    }
+
 })
 
-const main = async()  =>{
+const main = async () => {
     console.log(`Running Main`)
 
-    try{
+    const argv = yargs(hideBin(process.argv))
+        .option('symbol', {
+            alias: 's',
+            demandOption: false,
+            default: 'IBM.N',
+            describe: 'set up RIC Code',
+            type: 'string'
+        })
+        .version('1.0.0')
+        .example([
+            ['$0 --symbol=RIC Code', '']
+        ])
+        .argv
+    symbol = argv.symbol
+
+    try {
 
         await authenRDP(username, password, client_id, refresh_token)
         //console.log(access_token)
@@ -213,7 +226,7 @@ const main = async()  =>{
         const symbologyData = await requestSymbol(symbol, access_token)
         console.log(JSON.stringify(symbologyData))
 
-    }catch (error) {
+    } catch (error) {
         console.log(error)
     }
 
