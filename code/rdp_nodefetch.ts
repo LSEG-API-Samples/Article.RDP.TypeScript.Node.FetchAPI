@@ -15,13 +15,13 @@ import { PDP_Symbology_Req_Type} from './rdp_types'
 import { RDP_AuthRevoke_Type} from './rdp_types'
 
 
-const rdpServer: string = process.env.RDP_BASE_URL || 'https://api.refinitiv.com'
+const rdpServer: string = process.env.RDP_BASE_URL || ''
 
-const rdpAuthURL: string = process.env.RDP_AUTH_URL || '/auth/oauth2/v1/token'
-const rdpESGURL: string = process.env.RDP_ESG_URL || '/data/environmental-social-governance/v2/views/scores-full'
-const rdpSymbologyURL: string = process.env.RDP_SYMBOLOGY_URL || '/discovery/symbology/v1/lookup'
-const rdpAuthRevokeURL: string = process.env.RDP_AUTH_REVOKE_URL || '/auth/oauth2/v1/revoke'
-
+const rdpAuthURL: string = process.env.RDP_AUTH_URL || ''
+const rdpESGURL: string = process.env.RDP_ESG_URL || ''
+const rdpSymbologyURL: string = process.env.RDP_SYMBOLOGY_URL || ''
+const rdpAuthRevokeURL: string = process.env.RDP_AUTH_REVOKE_URL || ''
+const rdpNewsURL: string = process.env.RDP_NEWS_URL || ''
 
 
 const username: string = process.env.RDP_USERNAME || ''
@@ -57,7 +57,7 @@ const authenRDP = async (_username: string, _password: string, _clientid: string
         delete authReq['password']
     }
 
-    console.log(`authReq is ${JSON.stringify(authReq)}`)
+    //console.log(`authReq is ${JSON.stringify(authReq)}`)
 
 
     const response: Response = await fetch(authenURL, {
@@ -69,6 +69,7 @@ const authenRDP = async (_username: string, _password: string, _clientid: string
     })
 
     if (!response.ok) {
+        console.log('Authentication Failed')
         const statusText: string = await response.text()
         throw new Error(`HTTP error!: ${response.status} ${statusText}`);
     }
@@ -103,6 +104,7 @@ const revokeRDPAuthen = async (access_token: string, _clientid: string) => {
     })
 
     if (!response.ok) {
+        
         const statusText = await response.text()
         throw new Error(`HTTP error!: ${response.status} ${statusText}`);
     }
@@ -155,6 +157,29 @@ const requestSymbol = async (symbol: string, access_token: string) => {
     }
     //Parse response to JSON
     return await response.json()
+}
+
+const getNewsHeadlines = async (symbol: string, access_token: string, limit: number = 10) =>{
+    const newsURL: string = `${rdpServer}${rdpNewsURL}?query=${symbol}&limit=${limit}`
+
+    console.log(newsURL)
+
+    // Send HTTP Request
+    const response: Response = await fetch(newsURL, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${access_token}`
+        }
+    })
+
+    if (!response.ok) {
+        const statusText: string = await response.text()
+        throw new Error(`HTTP error!: ${response.status} ${statusText}`);
+    }
+    //Parse response to JSON
+    return await response.json()
+    
 }
 
 const requestESG = async (symbol: string, access_token: string) => {
@@ -220,14 +245,23 @@ const main = async () => {
         await authenRDP(username, password, client_id, refresh_token)
         //console.log(access_token)
 
-        // const esgData = await requestESG(symbol, access_token)
-        // console.log(esgData)
+        if(access_token.length === 0 && refresh_token.length === 0 ){
+            process.exit();
+        }
+
+        const esgData = await requestESG(symbol, access_token)
+        console.log(esgData)
 
         const symbologyData = await requestSymbol(symbol, access_token)
         console.log(JSON.stringify(symbologyData))
 
+        const newsHeadlineData = await getNewsHeadlines(symbol, access_token, 5)
+        console.log(JSON.stringify(newsHeadlineData))
+        
+
     } catch (error) {
         console.log(error)
+        process.exit();
     }
 
 }
