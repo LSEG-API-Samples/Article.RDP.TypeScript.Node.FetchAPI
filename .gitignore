@@ -2,6 +2,7 @@ node_modules/
 dist/
 .env
 .devcontainer/.env.devcontainer
-code/test.js
-code/testBase64.ts
-code/testYargs.ts
+project/src/test.js
+project/src/testBase64.ts
+project/src/testYargs.ts
+tmp/

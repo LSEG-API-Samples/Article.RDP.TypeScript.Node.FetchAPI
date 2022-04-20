@@ -12,7 +12,7 @@ const extensions = [
 const name = 'RollupTypeScriptBabel';
 
 const config = {
-  input: 'code/rdp_nodefetch.ts',
+  input: 'src/rdp_nodefetch.ts',
   output: {
     dir: 'dist',
     format: 'cjs'
@@ -22,7 +22,7 @@ const config = {
     commonjs(),
     typescript(),
     //babel({ extensions, include: ['src/**/*'] })
-    babel({ extensions, include: ['src/**/*'], babelHelpers: 'bundled' })
+    babel({ extensions, include: ['src/**/*'], babelHelpers: 'runtime' })
     ]
 };
 

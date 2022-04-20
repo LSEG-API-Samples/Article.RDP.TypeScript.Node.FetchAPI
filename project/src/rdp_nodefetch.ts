@@ -213,7 +213,7 @@ process.on('SIGINT', async () => {
         // Waiting time for clean WebSocket connection
         setTimeout(() => {
             //graceful shutdown
-            process.exit();
+            process.exit()
         }, 1000);
 
     } catch (error) {
