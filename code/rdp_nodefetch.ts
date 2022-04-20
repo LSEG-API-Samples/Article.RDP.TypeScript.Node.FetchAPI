@@ -7,8 +7,8 @@
 
 // Example Code Disclaimer:
 // ALL EXAMPLE CODE IS PROVIDED ON AN “AS IS” AND “AS AVAILABLE” BASIS FOR ILLUSTRATIVE PURPOSES ONLY. REFINITIV MAKES NO REPRESENTATIONS OR WARRANTIES OF ANY KIND, EXPRESS OR IMPLIED, AS TO THE OPERATION OF THE EXAMPLE CODE, OR THE INFORMATION, CONTENT, OR MATERIALS USED IN CONNECTION WITH THE EXAMPLE CODE. YOU EXPRESSLY AGREE THAT YOUR USE OF THE EXAMPLE CODE IS AT YOUR SOLE RISK.
-const {hideBin} = require('yargs/helpers')
-const yargs = require('yargs/yargs')
+import yargs from 'yargs'
+import { hideBin } from 'yargs/helpers'
 
 import { RDP_AuthToken_Type} from './rdp_types'
 import { PDP_Symbology_Req_Type} from './rdp_types'
@@ -212,7 +212,7 @@ const main = async () => {
         .example([
             ['$0 --symbol=RIC Code', '']
         ])
-        .argv
+        .parseSync()
     symbol = argv.symbol
 
     try {
