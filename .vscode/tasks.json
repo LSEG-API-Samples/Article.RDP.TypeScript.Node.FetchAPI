@@ -11,7 +11,7 @@
 			  },
 			"problemMatcher": [],
 			"label": "Compile",
-			"detail": "npx rollup --config"
+			"detail": "npx tsc"
 		}
 	]
 }
