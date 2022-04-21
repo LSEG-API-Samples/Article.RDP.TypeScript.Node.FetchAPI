@@ -1,7 +1,6 @@
 node_modules/
 dist/
 .env
-.devcontainer/.env.devcontainer
+.devcontainer/
 src/test.js
-src/testBase64.ts
 src/testYargs.ts

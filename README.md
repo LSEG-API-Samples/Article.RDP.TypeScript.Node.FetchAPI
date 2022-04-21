@@ -1,16 +1,20 @@
 # Testing Node.js native Fetch API with Refinitiv Data Platform APIs
 
+Example Code Disclaimer:
+ALL EXAMPLE CODE IS PROVIDED ON AN “AS IS” AND “AS AVAILABLE” BASIS FOR ILLUSTRATIVE PURPOSES ONLY. REFINITIV MAKES NO REPRESENTATIONS OR WARRANTIES OF ANY KIND, EXPRESS OR IMPLIED, AS TO THE OPERATION OF THE EXAMPLE CODE, OR THE INFORMATION, CONTENT, OR MATERIALS USED IN CONNECTION WITH THE EXAMPLE CODE. YOU EXPRESSLY AGREE THAT YOUR USE OF THE EXAMPLE CODE IS AT YOUR SOLE RISK.
+
+
 ## <a id="intro"></a>Introduction
 
-The Node.js **native** [Fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API) i s now available as experimental feature in [Node v17.5](https://nodejs.org/en/blog/release/v17.5.0/). Developers do not need to install extra fetch packages anymore. Frontend Developers will be fimilar with the HTTP code in Node. 
+The Node.js **native** [Fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API) is now available as experimental feature in [Node v17.5](https://nodejs.org/en/blog/release/v17.5.0/). Developers do not need to install extra fetch packages anymore. Frontend Developers will be familiar with the HTTP code in Node. 
 
-To test this built-in API, you can run the native Fetch code with the ```--experimental-fetch``` when you run Node application as follow:
+To test this built-in API, you can run the native Fetch code with the ```--experimental-fetch``` when you run the Node application as follow:
 
 ```
 $> node app.js --experimental-fetch 
 ```
 
-Since it is still an experimental feature, so it is advisable to test it in a control environment such as Docker. This helps to avoid mess-up your local environment. 
+Since it is still an experimental feature, so it is advisable to test it in a controlled environment such as Docker. This helps to avoid mess-up your local environment. 
 
 ## Running as VS Code DevContainer
 
@@ -38,28 +42,33 @@ Since it is still an experimental feature, so it is advisable to test it in a co
     ```
     $workspace/project> npm install
     ```
-8. Build and run the example pressing the ```F5``` button or selecting *Run* then *Start Debugging* option from VS Code menu.
+8. Build and run the example by pressing the ```F5``` button or selecting *Run* then *Start Debugging* option from VS Code menu.
 
-#### Build Docker Image
-```
-docker build . -t testfetch
-```
-#### Running Docker Container
-```
-docker run -it --env-file .env --name testfetch testfetch
-```
-#### Stop and Clear the application 
+## Running as a manual Docker Container
 
-Press ```Ctrl+C``` or ```docker stop testfetch```.
+1. Start Docker
+2. create a file name ```.env``` in a *project* folder with the following content.
+    ```
+    RDP_BASE_URL=https://api.refinitiv.com
+    RDP_AUTH_URL=/auth/oauth2/v1/token
+    RDP_AUTH_REVOKE_URL=/auth/oauth2/v1/revoke
+    RDP_ESG_URL=/data/environmental-social-governance/v2/views/scores-full
+    RDP_SYMBOLOGY_URL=/discovery/symbology/v1/lookup
 
-Then
-```
-docker rm testfetch
-
-docker rmi testfetch
-```
-
-node --experimental-fetch ./dist/rdp_nodefetch.js"
-
-or 
-node --experimental-fetch ./dist/rdp_nodefetch.min.js
+    RDP_USERNAME=<RDP UserName>
+    RDP_PASSWORD=<RDP Password>
+    RDP_APP_KEY=<RDP Client_ID>
+    ```
+3. Build a Docker image with the following command:
+    ```
+    $project> docker build . -t testfetch
+    ```
+4. Run a Docker container with the following command: 
+    ```
+    $project> docker run -it --name testfetch --env-file .env testfetch --symbol <RIC>
+    ```
+5. To stop and delete a Docker container, run the following command:
+    ```
+    $project> docker stop testfetch
+    $project> docker rm testfetch
+    ```
