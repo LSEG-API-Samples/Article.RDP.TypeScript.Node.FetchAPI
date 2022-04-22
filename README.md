@@ -65,7 +65,7 @@ Since it is still an experimental feature, so it is advisable to test it in a co
     ```
 4. Run a Docker container with the following command: 
     ```
-    $project> docker run -it --name testfetch --env-file .env testfetch --symbol <RIC>
+    $project> docker run -it --name testfetch --env-file .env testfetch --symbol <RIC> --newslimit <numbers of news limit>
     ```
 5. To stop and delete a Docker container, run the following command:
     ```

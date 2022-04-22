@@ -14,7 +14,7 @@ import { RDP_AuthToken_Type} from './rdp_types'
 import { PDP_Symbology_Req_Type} from './rdp_types'
 import { RDP_AuthRevoke_Type} from './rdp_types'
 import { RDP_NewsHeadlines_Table_Type } from './rdp_types'
-
+import { RDP_Symbology_Table_Type } from './rdp_types'
 
 
 const rdpServer: string = process.env.RDP_BASE_URL || ''
@@ -39,10 +39,11 @@ let expires_in: string = ''
 let symbol: string = 'IBM.N'
 let newsLimit: number = 10
 
-//const authenRDP = async (opt:RDP_AuthToken_Type) =>{
+// Send HTTP Post request to get Access Token (Password Grant and Refresh Grant) from RDP Auth Service
 const authenRDP = async (_username: string, _password: string, _clientid: string, _refresh_token: string) => {
     const authenURL: string = `${rdpServer}${rdpAuthURL}`
 
+    //Init Authentication Resquest Message and First Login scenario
     let authReq: RDP_AuthToken_Type = {
         'username': _username,
         'client_id': _clientid,
@@ -53,6 +54,7 @@ const authenRDP = async (_username: string, _password: string, _clientid: string
         'grant_type': 'password',
     }
 
+    //For the Refresh_Token scenario
     if (_refresh_token.length !== 0) {
         authReq['refresh_token'] = _refresh_token,
             authReq['grant_type'] = 'refresh_token'
@@ -62,7 +64,7 @@ const authenRDP = async (_username: string, _password: string, _clientid: string
 
     //console.log(`authReq is ${JSON.stringify(authReq)}`)
 
-
+    // Send HTTP Request
     const response: Response = await fetch(authenURL, {
         method: 'POST',
         headers: {
@@ -79,6 +81,7 @@ const authenRDP = async (_username: string, _password: string, _clientid: string
     console.log('Authentication Granted')
     //Parse response to JSON
     const authResponse = await response.json()
+    //Set Token Information
     access_token = authResponse.access_token
     refresh_token = authResponse.refresh_token
     expires_in = authResponse.expires_in
@@ -87,6 +90,7 @@ const authenRDP = async (_username: string, _password: string, _clientid: string
 
 }
 
+// Send Authentication Revoke Request message to RDP Auth Service
 const revokeRDPAuthen = async (access_token: string, _clientid: string) => {
 
     const authenURL = `${rdpServer}${rdpAuthRevokeURL}`
@@ -97,6 +101,7 @@ const revokeRDPAuthen = async (access_token: string, _clientid: string) => {
 
     const clientIDBase64: string = Buffer.from(`${client_id}:`).toString('base64')
 
+    // Send HTTP Request
     const response = await fetch(authenURL, {
         method: 'POST',
         headers: {
@@ -107,7 +112,6 @@ const revokeRDPAuthen = async (access_token: string, _clientid: string) => {
     })
 
     if (!response.ok) {
-        
         const statusText = await response.text()
         throw new Error(`HTTP error!: ${response.status} ${statusText}`);
     }
@@ -116,6 +120,7 @@ const revokeRDPAuthen = async (access_token: string, _clientid: string) => {
 
 }
 
+//Send a Refresh Grant message before Access Token's expires (expires_in time)
 const setRefreshTime = () => {
 
     const millis: number = (parseInt(expires_in) * 0.90) * 1000
@@ -129,9 +134,13 @@ const setRefreshTime = () => {
     }, millis)
 }
 
+// Request Symbology Lookup Data from RDP Symbology Lookup Service
 const requestSymbol = async (symbol: string, access_token: string) => {
     const symbologyURL: string = `${rdpServer}${rdpSymbologyURL}`
 
+    console.log(`Requesting Symbology data from ${symbologyURL}`)
+
+    // Create POST requst message
     const reqSymbolObj: PDP_Symbology_Req_Type = {
         'from': [{
             'identifierTypes': ['RIC'],
@@ -156,12 +165,14 @@ const requestSymbol = async (symbol: string, access_token: string) => {
 
     if (!response.ok) {
         const statusText: string = await response.text()
-        throw new Error(`HTTP error!: ${response.status} ${statusText}`);
+        throw new Error(`Get Symbology HTTP error!: ${response.status} ${statusText}`);
     }
+    console.log('Get Symbology data success.')
     //Parse response to JSON
     return await response.json()
 }
 
+// Request News Headlines Data from RDP News Service
 const getNewsHeadlines = async (symbol: string, access_token: string, limit: number = 10) =>{
     const newsURL: string = `${rdpServer}${rdpNewsURL}?query=${symbol}&limit=${limit}`
 
@@ -180,12 +191,13 @@ const getNewsHeadlines = async (symbol: string, access_token: string, limit: num
         const statusText: string = await response.text()
         throw new Error(`Get News Headlines HTTP error!: ${response.status} ${statusText}`);
     }
-    console.log('Get News Headlines')
+    console.log('Get News Headlines data success.')
     //Parse response to JSON
     return await response.json()
     
 }
 
+// Request ESG Data from RDP ESG Service
 const requestESG = async (symbol: string, access_token: string) => {
     const esgURL: string = `${rdpServer}${rdpESGURL}?universe=${symbol}`
 
@@ -200,8 +212,9 @@ const requestESG = async (symbol: string, access_token: string) => {
 
     if (!response.ok) {
         const statusText: string = await response.text()
-        throw new Error(`HTTP error!: ${response.status} ${statusText}`);
+        throw new Error(`Get ESG HTTP error!: ${response.status} ${statusText}`);
     }
+    console.log('Get ESG data success.')
     //Parse response to JSON
     return await response.json()
 }
@@ -214,7 +227,6 @@ process.on('SIGINT', async () => {
 
         await revokeRDPAuthen(access_token, refresh_token)
 
-        // Waiting time for clean WebSocket connection
         setTimeout(() => {
             //graceful shutdown
             process.exit()
@@ -226,9 +238,15 @@ process.on('SIGINT', async () => {
 
 })
 
+// Convert News Headline JSON data to be a table
 const displayNewsHeadlines = (newsJSON:any) => {
     const newsData: any = newsJSON['data']
     let newsItem:any = undefined
+
+    //If no news data
+    if(newsData.length === 0){
+        return console.log('No news data for this query')
+    }
 
     const newsHeadlinesTable: RDP_NewsHeadlines_Table_Type = { data: [] }
 
@@ -247,9 +265,39 @@ const displayNewsHeadlines = (newsJSON:any) => {
     console.table(newsHeadlinesTable['data'])
 }
 
-const main = async () => {
-    console.log(`Running Main`)
+// Convert Symbology JSON data to be a table
+const displaySymbology = (symbologyJSON:any) => {
 
+    const symbologyData: any = symbologyJSON['data']
+    const symbologyOutput: any  = symbologyData[0]['output']
+
+    //If the convertion result is error or empty
+    if(symbologyOutput.length === 0 || symbologyData[0].hasOwnProperty('errors')){
+        return console.log(`Error: ${symbologyData[0]['errors'][0]} (${symbologyData[0]['input'][0]['value']})`)
+    }
+
+    const symbologyTable: RDP_Symbology_Table_Type = { data: [] }
+    symbologyOutput.forEach(({identifierType,value, name, status }:any)=>{
+        symbologyTable['data'].push({
+            identifierType,
+            value,
+            name,
+            status
+        })
+    })
+
+    console.log(`Input Symbol = ${symbologyData[0]['input'][0]['value']} type = ${symbologyData[0]['input'][0]['identifierType']}`)
+    console.log('Converted Identifiers:')
+    console.table(symbologyTable['data'])
+    
+}
+
+// ---------------- Main Function ---------------------------------------- //
+const main = async () => {
+
+    console.log(`Running RDP Node.js example application`)
+
+    //Getting command line arguments
     const argv = yargs(hideBin(process.argv))
         .option('symbol', {
             alias: 's',
@@ -280,18 +328,21 @@ const main = async () => {
 
     try {
 
+        //Send authentication request
         await authenRDP(username, password, client_id, refresh_token)
         //console.log(access_token)
 
         if(access_token.length === 0 && refresh_token.length === 0 ){
+            console.log('Error, exit the application')
             process.exit();
         }
 
         // const esgData = await requestESG(symbol, access_token)
         // console.log(esgData)
 
-        // const symbologyData = await requestSymbol(symbol, access_token)
-        // console.log(JSON.stringify(symbologyData))
+        const symbologyData = await requestSymbol(symbol, access_token)
+        //console.log(JSON.stringify(symbologyData))
+        displaySymbology(symbologyData)
 
         const newsHeadlineData = await getNewsHeadlines(symbol, access_token, newsLimit)
         //console.log(JSON.stringify(newsHeadlineData))
