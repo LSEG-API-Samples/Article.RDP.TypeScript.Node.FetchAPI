@@ -7,36 +7,37 @@
 
 // Example Code Disclaimer:
 // ALL EXAMPLE CODE IS PROVIDED ON AN “AS IS” AND “AS AVAILABLE” BASIS FOR ILLUSTRATIVE PURPOSES ONLY. REFINITIV MAKES NO REPRESENTATIONS OR WARRANTIES OF ANY KIND, EXPRESS OR IMPLIED, AS TO THE OPERATION OF THE EXAMPLE CODE, OR THE INFORMATION, CONTENT, OR MATERIALS USED IN CONNECTION WITH THE EXAMPLE CODE. YOU EXPRESSLY AGREE THAT YOUR USE OF THE EXAMPLE CODE IS AT YOUR SOLE RISK.
+
+// Importing NPM packages
 import yargs from 'yargs'
 import { hideBin } from 'yargs/helpers'
-
+// Importing Types
 import { RDP_AuthToken_Type} from './rdp_types'
 import { PDP_Symbology_Req_Type} from './rdp_types'
 import { RDP_AuthRevoke_Type} from './rdp_types'
 import { RDP_NewsHeadlines_Table_Type } from './rdp_types'
 import { RDP_Symbology_Table_Type } from './rdp_types'
 
-
+// RDP APIs endpoints
 const rdpServer: string = process.env.RDP_BASE_URL || ''
-
 const rdpAuthURL: string = process.env.RDP_AUTH_URL || ''
-const rdpESGURL: string = process.env.RDP_ESG_URL || ''
 const rdpSymbologyURL: string = process.env.RDP_SYMBOLOGY_URL || ''
 const rdpAuthRevokeURL: string = process.env.RDP_AUTH_REVOKE_URL || ''
 const rdpNewsURL: string = process.env.RDP_NEWS_URL || ''
 
-
+// RDP Credentials
 const username: string = process.env.RDP_USERNAME || ''
 const password: string = process.env.RDP_PASSWORD || ''
 const client_id: string = process.env.RDP_APP_KEY || ''
 
 const scope: string = 'trapi'
 const takeExclusiveSignOnControl: boolean = true
+// Access Token Information
 let access_token: string = ''
 let refresh_token: string = ''
 let expires_in: string = ''
 
-let symbol: string = 'IBM.N'
+let symbol: string = 'LSEG.L'
 let newsLimit: number = 10
 
 // Send HTTP Post request to get Access Token (Password Grant and Refresh Grant) from RDP Auth Service
@@ -197,28 +198,6 @@ const getNewsHeadlines = async (symbol: string, access_token: string, limit: num
     
 }
 
-// Request ESG Data from RDP ESG Service
-const requestESG = async (symbol: string, access_token: string) => {
-    const esgURL: string = `${rdpServer}${rdpESGURL}?universe=${symbol}`
-
-    // Send HTTP Request
-    const response: Response = await fetch(esgURL, {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${access_token}`
-        }
-    })
-
-    if (!response.ok) {
-        const statusText: string = await response.text()
-        throw new Error(`Get ESG HTTP error!: ${response.status} ${statusText}`);
-    }
-    console.log('Get ESG data success.')
-    //Parse response to JSON
-    return await response.json()
-}
-
 // Handle user press Ctrl+C while running the application.
 process.on('SIGINT', async () => {
     console.log('Gracefully shutting down from Ctrl+C, calling RDP API Revoke service');
@@ -299,17 +278,14 @@ const main = async () => {
 
     //Getting command line arguments
     const argv = yargs(hideBin(process.argv))
+        
         .option('symbol', {
             alias: 's',
             demandOption: false,
-            default: 'IBM.N',
+            default: 'LSEG.L',
             describe: 'set up RIC Code',
             type: 'string'
         })
-        .version('1.0.0')
-        .example([
-            ['$0 --symbol=RIC Code', '']
-        ])
         .option('newslimit', {
             alias: 'l',
             demandOption: false,
@@ -319,7 +295,7 @@ const main = async () => {
         })
         .version('1.0.0')
         .example([
-            ['$0 --newslimit=5', '']
+            ['node --experimental-fetch $0 --symbol=RIC Code --newslimit=5', '']
         ])
         .parseSync()
 
@@ -337,9 +313,6 @@ const main = async () => {
             process.exit();
         }
 
-        // const esgData = await requestESG(symbol, access_token)
-        // console.log(esgData)
-
         const symbologyData = await requestSymbol(symbol, access_token)
         //console.log(JSON.stringify(symbologyData))
         displaySymbology(symbologyData)
@@ -356,4 +329,5 @@ const main = async () => {
 
 }
 
+// Running the application
 main()

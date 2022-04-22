@@ -13,7 +13,7 @@
                 "<node_internals>/**"
             ],
             "program": "${workspaceFolder}/project/dist/rdp_nodefetch.js",
-            "args": ["--symbol","AAPL.O"],
+            "args": ["--symbol","LSEG.L"],
             "runtimeArgs": ["--experimental-fetch"],
             "console": "internalConsole",
             "stopAtEntry": false,
