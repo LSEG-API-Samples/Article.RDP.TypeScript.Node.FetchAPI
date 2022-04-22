@@ -13,6 +13,8 @@ import { hideBin } from 'yargs/helpers'
 import { RDP_AuthToken_Type} from './rdp_types'
 import { PDP_Symbology_Req_Type} from './rdp_types'
 import { RDP_AuthRevoke_Type} from './rdp_types'
+import { RDP_NewsHeadlines_Table_Type } from './rdp_types'
+
 
 
 const rdpServer: string = process.env.RDP_BASE_URL || ''
@@ -35,6 +37,7 @@ let refresh_token: string = ''
 let expires_in: string = ''
 
 let symbol: string = 'IBM.N'
+let newsLimit: number = 10
 
 //const authenRDP = async (opt:RDP_AuthToken_Type) =>{
 const authenRDP = async (_username: string, _password: string, _clientid: string, _refresh_token: string) => {
@@ -162,7 +165,7 @@ const requestSymbol = async (symbol: string, access_token: string) => {
 const getNewsHeadlines = async (symbol: string, access_token: string, limit: number = 10) =>{
     const newsURL: string = `${rdpServer}${rdpNewsURL}?query=${symbol}&limit=${limit}`
 
-    console.log(newsURL)
+    console.log(`Requesting News Headlines from ${newsURL}`)
 
     // Send HTTP Request
     const response: Response = await fetch(newsURL, {
@@ -175,8 +178,9 @@ const getNewsHeadlines = async (symbol: string, access_token: string, limit: num
 
     if (!response.ok) {
         const statusText: string = await response.text()
-        throw new Error(`HTTP error!: ${response.status} ${statusText}`);
+        throw new Error(`Get News Headlines HTTP error!: ${response.status} ${statusText}`);
     }
+    console.log('Get News Headlines')
     //Parse response to JSON
     return await response.json()
     
@@ -222,6 +226,27 @@ process.on('SIGINT', async () => {
 
 })
 
+const displayNewsHeadlines = (newsJSON:any) => {
+    const newsData: any = newsJSON['data']
+    let newsItem:any = undefined
+
+    const newsHeadlinesTable: RDP_NewsHeadlines_Table_Type = { data: [] }
+
+    newsData.forEach((headline:any) => {
+        newsItem = headline['newsItem']
+
+        //console.log(`News Headline is ${newsHeadlines}\n`)
+        //console.log(`storyId = ${headline['storyId']} and versionCreated =  ${newsVersionCreated}`)
+
+        newsHeadlinesTable['data'].push({
+            'storyId': headline['storyId'],
+            'title': newsItem['itemMeta']['title'][0]['$'],
+            'versionCreated': newsItem['itemMeta']['versionCreated']['$']
+        })
+    })
+    console.table(newsHeadlinesTable['data'])
+}
+
 const main = async () => {
     console.log(`Running Main`)
 
@@ -237,8 +262,21 @@ const main = async () => {
         .example([
             ['$0 --symbol=RIC Code', '']
         ])
+        .option('newslimit', {
+            alias: 'l',
+            demandOption: false,
+            default: 10,
+            describe: 'set up News Headlines count',
+            type: 'number'
+        })
+        .version('1.0.0')
+        .example([
+            ['$0 --newslimit=5', '']
+        ])
         .parseSync()
+
     symbol = argv.symbol
+    newsLimit = argv.newslimit
 
     try {
 
@@ -249,14 +287,15 @@ const main = async () => {
             process.exit();
         }
 
-        const esgData = await requestESG(symbol, access_token)
-        console.log(esgData)
+        // const esgData = await requestESG(symbol, access_token)
+        // console.log(esgData)
 
-        const symbologyData = await requestSymbol(symbol, access_token)
-        console.log(JSON.stringify(symbologyData))
+        // const symbologyData = await requestSymbol(symbol, access_token)
+        // console.log(JSON.stringify(symbologyData))
 
-        const newsHeadlineData = await getNewsHeadlines(symbol, access_token, 5)
-        console.log(JSON.stringify(newsHeadlineData))
+        const newsHeadlineData = await getNewsHeadlines(symbol, access_token, newsLimit)
+        //console.log(JSON.stringify(newsHeadlineData))
+        displayNewsHeadlines(newsHeadlineData)
         
 
     } catch (error) {

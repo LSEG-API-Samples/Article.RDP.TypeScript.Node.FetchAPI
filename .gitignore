@@ -8,3 +8,4 @@ project/.env.devcontainer
 project/src/test.js
 project/src/testBase64.ts
 project/src/testYargs.ts
+applenews.json

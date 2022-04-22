@@ -37,3 +37,13 @@ export type RDP_Symbology_From_Type = {
 export type RDP_Symbology_To_Type = {
     identifierTypes: string[]
 }
+
+export type RDP_NewsHeadlines_Table_Type = {
+    data: RDP_NewsHeadlines_Data_Type[]
+}
+
+export type RDP_NewsHeadlines_Data_Type = {
+    storyId: string
+    title: string
+    versionCreated: string
+}

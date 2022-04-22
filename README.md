@@ -72,3 +72,5 @@ Since it is still an experimental feature, so it is advisable to test it in a co
     $project> docker stop testfetch
     $project> docker rm testfetch
     ```
+
+https://sdtimes.com/softwaredev/node-js-18-available-with-fetch-api-enabled-by-default/
