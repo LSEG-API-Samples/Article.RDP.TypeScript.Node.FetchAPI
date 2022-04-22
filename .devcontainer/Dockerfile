@@ -1,5 +1,8 @@
 # Builder stage, for building the source code only
-FROM node:17.5.0-alpine 
+ARG NODE_VERSION=17.5.0
+ARG VARIANT=alpine3.15
+FROM node:${NODE_VERSION}-${VARIANT}
+
 LABEL maintainer="Developer Advocate"
 
 # Create app directory

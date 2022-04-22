@@ -1,5 +1,7 @@
 # Builder stage, for building the source code only
-FROM node:17.5.0-alpine as builder
+ARG NODE_VERSION=17.5.0
+ARG VARIANT=alpine3.15
+FROM node:${NODE_VERSION}-${VARIANT} as builder
 LABEL maintainer="Developer Advocate"
 
 # Create app directory
@@ -20,7 +22,7 @@ RUN npm run build
 
 ## Second stage, for running the application in a final image.
 
-FROM node:17.5.0-alpine
+FROM node:${NODE_VERSION}-${VARIANT}
 
 # Create app directory
 WORKDIR /app

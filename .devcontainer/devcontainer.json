@@ -3,15 +3,19 @@
 {
 	"name": "test_node_project",
 	//"image": "node:17.5.0",
-	"build": {"dockerfile": "Dockerfile"},
+	"build": {
+		"dockerfile": "Dockerfile",
+		"args": { 
+			// Update 'NODE_VERSION' to pick a Node version: 17.5.0, '18.0.0', etc
+			"NODE_VERSION": "17.5.0",
+			"VARIANT": "alpine3.15" 
+		}
+	},
 	"runArgs": [
         "--env-file=.devcontainer/.env.devcontainer"
     ],
 	"workspaceMount": "source=${localWorkspaceFolder},target=/workspace,type=bind",
 	"workspaceFolder": "/workspace",
-	"mounts": [
-        "source=${localWorkspaceFolder}/.vscode,target=${containerWorkspaceFolder}/.vscode,type=bind,consistency=cached",
-		"source=${localWorkspaceFolder}/project,target=${containerWorkspaceFolder}/project,type=bind,consistency=cached"
-	],
+	"postCreateCommand": "npm install",
 	"shutdownAction":"stopContainer"
 }

@@ -6,13 +6,13 @@
     "configurations": [
 
         {
-            "type": "pwa-node",
+            "type": "node",
             "request": "launch",
             "name": "Launch Program",
             "skipFiles": [
                 "<node_internals>/**"
             ],
-            "program": "${workspaceFolder}/project/dist/rdp_nodefetch.js",
+            "program": "${workspaceFolder}/dist/rdp_nodefetch.js",
             "args": ["--symbol","LSEG.L"],
             "runtimeArgs": ["--experimental-fetch"],
             "console": "internalConsole",

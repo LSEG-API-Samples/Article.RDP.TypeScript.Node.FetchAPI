@@ -1,6 +1,0 @@
-node_modules/
-dist/
-.env
-.devcontainer/
-src/test.js
-src/testYargs.ts

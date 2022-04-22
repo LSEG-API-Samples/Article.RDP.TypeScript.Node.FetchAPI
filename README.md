@@ -32,21 +32,13 @@ Since it is still an experimental feature, so it is advisable to test it in a co
 2. Start a Docker desktop or Docker engine on your machine.
 4. Install the [VS Code - Remote Development extension pack](https://aka.ms/vscode-remote/download/extension).
 5. Open the VS Code Command Palette with the ```F1``` key, and then select the **Remote-Containers: Reopen in Container** command.
-6. Once this build completes, VS Code automatically connects to the container. Open VS Code terminal and go to *project* folder
-    ```
-    $workspace> cd project
-    $workspace/project>
-    ```
-7. Run the following command in */workspace/project* folder to install all dependencies 
-    ```
-    $workspace/project> npm install
-    ```
-8. Build and run the example by pressing the ```F5``` button or selecting *Run* then *Start Debugging* option from VS Code menu.
+6. Once this build completes, VS Code automatically connects to the container, runs ```npm install``` to initialize the project for developers. 
+7. Build and run the example by pressing the ```F5``` button or selecting *Run* then *Start Debugging* option from VS Code menu.
 
 ## Running as a manual Docker Container
 
 1. Start Docker
-2. create a file name ```.env``` in a *project* folder with the following content.
+2. create a file name ```.env``` in a project folder root with the following content.
     ```
     RDP_BASE_URL=https://api.refinitiv.com
     RDP_AUTH_URL=/auth/oauth2/v1/token
@@ -60,16 +52,20 @@ Since it is still an experimental feature, so it is advisable to test it in a co
     ```
 3. Build a Docker image with the following command:
     ```
-    $project> docker build . -t testfetch
+    $> docker build . -t testfetch
     ```
 4. Run a Docker container with the following command: 
     ```
-    $project> docker run -it --name testfetch --env-file .env testfetch --symbol <RIC> --newslimit <numbers of news limit>
+    $> docker run -it --name testfetch --env-file .env testfetch --symbol <RIC> --newslimit <numbers of news limit>
     ```
-5. To stop and delete a Docker container, run the following command:
+5. To stop and delete a Docker container, press ```Ctrl+C``` (or run ```docker stop testfetch```) then run the following command:
     ```
-    $project> docker stop testfetch
-    $project> docker rm testfetch
+    $> docker rm testfetch
     ```
+Note: You can change the version of Node in a Docker image to be newer than *17.5.0* with the following command:
+
+```
+$> docker build . -t testfetch --build-arg NODE_VERSION=17.6.0
+```
 
 https://sdtimes.com/softwaredev/node-js-18-available-with-fetch-api-enabled-by-default/
