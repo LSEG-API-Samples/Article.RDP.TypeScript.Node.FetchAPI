@@ -1,5 +1,5 @@
 # Builder stage, for building the source code only
-ARG NODE_VERSION=17.5.0
+ARG NODE_VERSION=18.0.0
 ARG VARIANT=alpine3.15
 FROM node:${NODE_VERSION}-${VARIANT} as builder
 LABEL maintainer="Developer Advocate"
@@ -38,8 +38,8 @@ RUN npm install -g npm@8.7.0 \
 
 # Copy the bundle file and run script
 COPY --from=builder /app/dist ./dist
+# Set Docker to run the application
+ENTRYPOINT [ "node", "./dist/rdp_nodefetch.js"]
+#For Node 17.5.0
+#ENTRYPOINT [ "node", "--experimental-fetch", "./dist/rdp_nodefetch.js"]
 
-ENTRYPOINT [ "node", "--experimental-fetch", "./dist/rdp_nodefetch.js"]
-#ENTRYPOINT [ "node" ,"./dist/testYargs.js"]
-# Set Docker to start bash
-#CMD /bin/bash

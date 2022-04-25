@@ -14,7 +14,8 @@
             ],
             "program": "${workspaceFolder}/dist/rdp_nodefetch.js",
             "args": ["--symbol","LSEG.L"],
-            "runtimeArgs": ["--experimental-fetch"],
+            //If you are using Node.js 17.5.0+
+            //"runtimeArgs": ["--experimental-fetch"],
             "console": "internalConsole",
             "stopAtEntry": false,
             "preLaunchTask": "Compile"

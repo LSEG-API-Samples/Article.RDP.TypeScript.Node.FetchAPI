@@ -7,8 +7,8 @@
 		"dockerfile": "Dockerfile",
 		"args": { 
 			// Update 'NODE_VERSION' to pick a Node version: 17.5.0, '18.0.0', etc
-			"NODE_VERSION": "17.5.0",
-			"VARIANT": "alpine3.15" 
+			"NODE_VERSION": "18.0.0",
+			"VARIANT": "bullseye" 
 		}
 	},
 	"runArgs": [
