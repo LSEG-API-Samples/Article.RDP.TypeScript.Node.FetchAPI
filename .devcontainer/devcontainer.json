@@ -1,8 +1,7 @@
 // For format details, see https://aka.ms/devcontainer.json. For config options, see the README at:
 // https://github.com/microsoft/vscode-dev-containers/tree/v0.202.5/containers/
 {
-	"name": "test_node_project",
-	//"image": "node:17.5.0",
+	"name": "node_ts_native_fetch",
 	"build": {
 		"dockerfile": "Dockerfile",
 		"args": { 

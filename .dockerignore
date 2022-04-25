@@ -9,5 +9,4 @@ dist
 .env.example
 README.md 
 LICENSE.md
-applenews.json
-symbology.json
+Development.md

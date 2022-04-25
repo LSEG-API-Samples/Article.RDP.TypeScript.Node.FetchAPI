@@ -44,15 +44,14 @@ let newsLimit: number = 10
 const authenRDP = async (_username: string, _password: string, _clientid: string, _refresh_token: string) => {
     const authenURL: string = `${rdpServer}${rdpAuthURL}`
 
-    //Init Authentication Resquest Message and First Login scenario
+    //Init Authentication Request Message and First Login scenario
     let authReq: RDP_AuthToken_Type = {
         'username': _username,
         'client_id': _clientid,
         'password': _password,
         'scope': scope,
-        //'takeExclusiveSignOnControl': String(takeExclusiveSignOnControl),
-        takeExclusiveSignOnControl,
         'grant_type': 'password',
+        takeExclusiveSignOnControl
     }
 
     //For the Refresh_Token scenario
@@ -141,7 +140,7 @@ const requestSymbol = async (symbol: string, access_token: string) => {
 
     console.log(`Requesting Symbology data from ${symbologyURL}`)
 
-    // Create POST requst message
+    // Create POST request message
     const reqSymbolObj: PDP_Symbology_Req_Type = {
         'from': [{
             'identifierTypes': ['RIC'],
@@ -250,7 +249,7 @@ const displaySymbology = (symbologyJSON:any) => {
     const symbologyData: any = symbologyJSON['data']
     const symbologyOutput: any  = symbologyData[0]['output']
 
-    //If the convertion result is error or empty
+    //If the conversion result is error or empty
     if(symbologyOutput.length === 0 || symbologyData[0].hasOwnProperty('errors')){
         return console.log(`Error: ${symbologyData[0]['errors'][0]} (${symbologyData[0]['input'][0]['value']})`)
     }
@@ -289,7 +288,7 @@ const main = async () => {
         .option('newslimit', {
             alias: 'l',
             demandOption: false,
-            default: 10,
+            default: 5,
             describe: 'set up News Headlines count',
             type: 'number'
         })
