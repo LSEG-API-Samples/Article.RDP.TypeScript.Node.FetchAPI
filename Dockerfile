@@ -31,7 +31,7 @@ WORKDIR /app
 COPY --from=builder /app/package*.json .
 COPY --from=builder /app/tsconfig.json .
 
-#RUN npm install
+#RUN npm install with Production flag
 RUN npm install -g npm@8.7.0 \
     && npm ci --production\
     && npm cache clean --force

@@ -267,6 +267,8 @@ const displaySymbology = (symbologyJSON:any) => {
     console.log(`Input Symbol = ${symbologyData[0]['input'][0]['value']} type = ${symbologyData[0]['input'][0]['identifierType']}`)
     console.log('Converted Identifiers:')
     console.table(symbologyTable['data'])
+
+   
     
 }
 

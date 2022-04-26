@@ -1,4 +1,4 @@
-# Experiment Node.js native Fetch API with Refinitiv Data Platform APIs
+# Experiment Node.js native Fetch API with Refinitiv Data Platform APIs using TypeScript
 - version: 1.0
 - Last update: April 2022
 - Environment: Docker
@@ -35,9 +35,9 @@ async function getData() {
 }
 ```
 
-While the frontend JavaScript web developers have been using the Fetch API since 2015, the API has not been included in [Node.js](https://nodejs.org/en/) runtime environment. The backend JavaScript developers need to use the other libraries such as [the deprecated request module](https://www.npmjs.com/package/request), [postman-request (a fork of request)](https://www.npmjs.com/package/postman-request), [axios module](https://www.npmjs.com/package/axios), [Node Fetch module](https://www.npmjs.com/package/node-fetch), etc to make the HTTP request (with Promise) on Node.js.
+While the frontend JavaScript web developers have been using the Fetch API since 2015, the API has not been included in [Node.js](https://nodejs.org/en/) runtime environment. The backend JavaScript developers need to use the other libraries such as [the deprecated request module](https://www.npmjs.com/package/request), [postman-request](https://www.npmjs.com/package/postman-request), [axios](https://www.npmjs.com/package/axios), [Node Fetch module](https://www.npmjs.com/package/node-fetch), etc to make the HTTP request with Promise on Node server environment.
 
-Introduction in [Node version 17.5.0](https://nodejs.org/en/blog/release/v17.5.0/), the **native Fetch API** is now available as an **experimental feature**. The [Node version 18.0.0](https://nodejs.org/en/blog/release/v18.0.0/) also enables this experimental fetch API  on the global scope by default. The backend JavaScript developers do not need to install extra fetch-like modules anymore. The frontend developers will be familiar with the server-side code in Node.js. 
+Introduction in [Node version 17.5.0](https://nodejs.org/en/blog/release/v17.5.0/), the **native Fetch API** is now available as an **experimental feature** (thanks to [Undici](https://undici.nodejs.org/#/)). The [Node version 18.0.0](https://nodejs.org/en/blog/release/v18.0.0/) also enables this experimental fetch API  on the global scope by default. The backend JavaScript developers do not need to install extra fetch-like modules anymore. The frontend developers will be familiar with the server-side HTTP request code in Node.js. 
 
 Example code from [Node official page](https://nodejs.org/en/blog/release/v18.0.0/):
 ```
@@ -160,7 +160,16 @@ If you want to run the example with a Docker container manually, please follow t
     ```
 ![figure-3](images/03_run_docker.png "Run with docker")
 
+## <a id="summary"></a>Summary
+
+The coming of the native Fetch API on Node.js is good news for all developers. This built-in API improves cross-platform familiarity for JavaScript/TypeScript developers, they do need to use a different approach for the frontend (web browsers) and backend (Node.js) HTTP request code. This helps simplify the project and reduce the complexity of using and managing the 3rd party HTTP Request/Fetch modules. 
+
+At the same time, the [Refinitiv Data Platform (RDP) APIs](https://developers.refinitiv.com/en/api-catalog/refinitiv-data-platform/refinitiv-data-platform-apis) provide various Refinitiv data and content for developers via easy-to-use Web-based API. The APIs are easy to integrate into any application and platform that supports the HTTP protocol and JSON message format. 
+
+Let me remind you again, this demo projects aim for Development and POC purposes only. The native Fetch API is still an experimental feature (**As of April 2022**) and is **not recommended for Production use**.
+
 ## <a id="references"></a>References
+
 For further details, please check out the following resources:
 * [Refinitiv Data Platform APIs page](https://developers.refinitiv.com/en/api-catalog/refinitiv-data-platform/refinitiv-data-platform-apis) on the [Refinitiv Developer Community](https://developers.refinitiv.com/) website.
 * [Refinitiv Data Platform APIs Playground page](https://api.refinitiv.com).

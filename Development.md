@@ -1,4 +1,4 @@
-# Experiment Node.js native Fetch API with Refinitiv Data Platform APIs
+# Experiment Node.js native Fetch API with Refinitiv Data Platform APIs using TypeScript
 - version: 1.0
 - Last update: April 2022
 - Environment: Docker
@@ -16,6 +16,12 @@ This example project shows how to use the Node.js experimental native Fetch API 
 **Note**:
 Please be informed that this demo projects aim for Development and POC purposes only. The native Fetch API is still an experimental feature (**As of April 2022**) and is not recommended for Production use.
 
+## <a id="code_structure"></a>Example Code Structure
+
+The example application source codes are separated into 2 TypeScript files:
+- The main file ```rdp_nodefetch.ts```: The file contains the application main and connection logic.
+- The Type Aliases file ```rdp_types.ts```: This file contains all Type Aliases for the RDP Auth, News, and Discovery Symbology services JSON messages. 
+
 ## <a id="rdp_workflow"></a>RDP APIs Application Workflow
 
 Refinitiv Data Platform entitlement check is based on OAuth 2.0 specification. The first step of an application workflow is to get a token from RDP Auth Service, which will allow access to the protected resource, i.e. data REST API's. 
@@ -28,12 +34,6 @@ The API requires the following access credential information:
 Next, after the application received the Access Token (and authorization token) from RDP Auth Service, all subsequent REST API calls will use this token to get the data. Please find more detail regarding RDP APIs workflow in the following resources:
 - [RDP APIs: Introduction to the Request-Response API](https://developers.refinitiv.com/en/api-catalog/refinitiv-data-platform/refinitiv-data-platform-apis/tutorials#introduction-to-the-request-response-api) page.
 - [RDP APIs: Authorization - All about tokens](https://developers.refinitiv.com/en/api-catalog/refinitiv-data-platform/refinitiv-data-platform-apis/tutorials#authorization-all-about-tokens) page.
-
-## <a id="code_structure"></a>Example Code Structure
-
-The example application source codes are separated into 2 TypeScript files:
-- The main file ```rdp_nodefetch.ts```: The file contains the application main and connection logic.
-- The Type Aliases file ```rdp_types.ts```: This file contains all Type Aliases for the RDP Auth, News, and Discovery Symbology services JSON messages. 
 
 ## <a id="rdp_authen"></a>RDP APIs Authentication
 
@@ -238,9 +238,7 @@ This project covers the following the RDP APIs Services:
 
 ### RDP APIs Symbology Discovery Type Aliases
 
-This example converts a symbol from the RIC Code identifier to [ISIN](https://en.wikipedia.org/wiki/International_Securities_Identification_Number), [LEI](https://en.wikipedia.org/wiki/Legal_Entity_Identifier), and [ExchangeTicker](https://en.wikipedia.org/wiki/Ticker_symbol) identifiers using the RDP the Discovery Symbology Service.  
-
-I will begin by creating the Type Aliases for the Symbology JSON request message.
+This example converts a symbol from the RIC Code identifier to [ISIN](https://en.wikipedia.org/wiki/International_Securities_Identification_Number), [LEI](https://en.wikipedia.org/wiki/Legal_Entity_Identifier), and [ExchangeTicker](https://en.wikipedia.org/wiki/Ticker_symbol) identifiers using the RDP the Discovery Symbology Service. I will begin by creating the Type Aliases for the Symbology JSON request message.
 
 
 ```
@@ -513,3 +511,9 @@ const main = async () => {
 // Running the application
 main()
 ```
+The ```console.table()``` result with the ```newsHeadlineData``` object is as follows:
+
+![figure-3](images/06_news_table.png "News Headlines as table")
+
+That covers all the Node native Fetch API with RDP HTTP REST APIs application development using TypeScript. Please see how to run the project in the [README.md](README.md) file.
+
