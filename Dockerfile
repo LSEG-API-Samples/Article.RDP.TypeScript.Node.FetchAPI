@@ -18,7 +18,7 @@ RUN npm install -g npm@8.7.0 \
     && npm ci \
     && npm cache clean --force
 # Build app
-RUN npm run build
+RUN npm run build-minify
 
 ## Second stage, for running the application in a final image.
 
@@ -26,6 +26,10 @@ FROM node:${NODE_VERSION}-${VARIANT}
 
 # Create app directory
 WORKDIR /app
+
+# Set ENV Production 
+
+ENV NODE_ENV production
 
 #COPY configuration files
 COPY --from=builder /app/package*.json .
@@ -38,8 +42,11 @@ RUN npm install -g npm@8.7.0 \
 
 # Copy the bundle file and run script
 COPY --from=builder /app/dist ./dist
-# Set Docker to run the application
-ENTRYPOINT [ "node", "./dist/rdp_nodefetch.js"]
+# Set Docker to run the application with compress mode
+
+ENTRYPOINT [ "node", "./dist/rdp_nodefetch.min.js"]
+# For un-compress code
+#ENTRYPOINT [ "node", "./dist/rdp_nodefetch.js"]
 #For Node 17.5.0
 #ENTRYPOINT [ "node", "--experimental-fetch", "./dist/rdp_nodefetch.js"]
 
