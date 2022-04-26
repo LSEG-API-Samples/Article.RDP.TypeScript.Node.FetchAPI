@@ -1,7 +1,7 @@
 # Experiment Node.js native Fetch API with Refinitiv Data Platform APIs using TypeScript
 - version: 1.0
 - Last update: April 2022
-- Environment: Docker
+- Environment: Node.js, TypeScript, and Docker
 - Prerequisite: [Access to RDP credentials](#prerequisite)
 
 Example Code Disclaimer:
