@@ -11,7 +11,7 @@ ALL EXAMPLE CODE IS PROVIDED ON AN “AS IS” AND “AS AVAILABLE” BASIS FOR 
 
 The [Fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API) provides an interface for fetching resources asynchronously across the network using Promise. The Fetch API is wildly used by the frontend web developers for a while, but the [Node.js](https://nodejs.org/en/) just added this API as an experimental feature with Node version 17.5.0 on February 2022 for the backend developers. 
 
-This example project shows how to use the Node.js experimental native Fetch API with the [Refinitiv Data Platform (RDP) APIs](https://developers.refinitiv.com/en/api-catalog/refinitiv-data-platform/refinitiv-data-platform-apis) as the example HTTP REST APIs. The application source codes are implemented in the [TypeScript](https://www.typescriptlang.org) language, and then run the application in a controlled environment such as Docker using the [Node Docker Image](https://hub.docker.com/_/node). This helps to avoid mess-up your local development environment with this experimental feature.
+This example project shows how to use the Node.js experimental native Fetch API with the [Refinitiv Data Platform (RDP) APIs](https://developers.refinitiv.com/en/api-catalog/refinitiv-data-platform/refinitiv-data-platform-apis) as the example HTTP REST APIs. The application source codes are implemented in the [TypeScript](https://www.typescriptlang.org) language, and then run the application in a controlled environment such as [Docker](https://www.docker.com/) and [devcontainer](https://code.visualstudio.com/docs/remote/containers) using the [Node Docker Image](https://hub.docker.com/_/node). This helps to avoid mess-up your local development environment when experimenting with this feature.
 
 **Note**:
 Please be informed that this demo projects aim for Development and POC purposes only. The native Fetch API is still an experimental feature (**As of April 2022**) and is not recommended for Production use.
@@ -21,6 +21,37 @@ Please be informed that this demo projects aim for Development and POC purposes 
 The example application source codes are separated into 2 TypeScript files:
 - The main file ```rdp_nodefetch.ts```: The file contains the application main and connection logic.
 - The Type Aliases file ```rdp_types.ts```: This file contains all Type Aliases for the RDP Auth, News, and Discovery Symbology services JSON messages. 
+
+## <a id="ts_type_aliases"></a>Example Code Type Aliases
+
+Type Aliases is one of [TypeScript Object Types](https://www.typescriptlang.org/docs/handbook/2/objects.html) that helps developers type-checking their variables and data in the implementation time to avoid data type errors in a final JavaScript application. 
+
+This example project defines all Type Aliases for the RDP API's JSON request messages (for Auth and Symbology Discover services) and objects used by the application in the ```rdp_types.ts``` file.
+
+```
+//rdp_types.ts
+
+// Type for RDP Auth Token (v1) request message
+export type RDP_AuthToken_Type = {
+    username: string
+    password?: string
+    grant_type: 'password' | 'refresh_token'
+    takeExclusiveSignOnControl: any
+    scope?: string
+    client_id: string
+    refresh_token?: string
+}
+
+
+// Type for RDP Symbology Lookup request message
+export type PDP_Symbology_Req_Type = {
+    from: RDP_Symbology_From_Type[]
+    to: RDP_Symbology_To_Type[]
+    reference: string[]
+    type: string
+}
+...
+```
 
 ## <a id="rdp_workflow"></a>RDP APIs Application Workflow
 
@@ -39,24 +70,7 @@ Next, after the application received the Access Token (and authorization token) 
 
 ### RDP APIs Authentication Type Aliases
 
-Firstly, we create the TypeScript Type Aliases to define RDP APIs Login request message structure in the ```rdp_types.ts``` file. Type Aliases is one of [TypeScript Object Types](https://www.typescriptlang.org/docs/handbook/2/objects.html) that helps developers type-checking their variables and data in the implementation time to avoid data type errors in a final JavaScript application.
-
-```
-//rdp_types.ts
-
-// Type for RDP Auth Token (v1) request message
-export type RDP_AuthToken_Type = {
-    username: string
-    password?: string
-    grant_type: 'password' | 'refresh_token'
-    takeExclusiveSignOnControl: any
-    scope?: string
-    client_id: string
-    refresh_token?: string
-}
-```
-
-Next, import this ```RDP_AuthToken_Type``` Type to the main application ```rdp_nodefetch.ts``` file, and define all necessary variables for the API endpoints and credentials. 
+Firstly, we import and crate all necessary types, objects, and variables for the API endpoints and credentials in the main application ```rdp_nodefetch.ts``` file. 
 
 ```
 //rdp_nodefetch.ts
@@ -90,6 +104,9 @@ const main = async () => {
 main()
 
 ```
+
+Please note that the API endpoints and credentials will be assigned to the application at run time with the environment variable.
+
 ### Sending Authentication Request with the Fetch API
 
 Then we create a function named ```authenRDP``` to send a login request message to the RDP Auth Token service. The function creates the JSON request message from the ```RDP_AuthToken_Type``` Type and then sends it to the RDP via Node native Fetch API as an HTTP POST message.
@@ -236,36 +253,9 @@ This project covers the following the RDP APIs Services:
 
 ## <a id="rdp_symbology"></a>RDP APIs Symbology Discovery Service
 
-### RDP APIs Symbology Discovery Type Aliases
-
-This example converts a symbol from the RIC Code identifier to [ISIN](https://en.wikipedia.org/wiki/International_Securities_Identification_Number), [LEI](https://en.wikipedia.org/wiki/Legal_Entity_Identifier), and [ExchangeTicker](https://en.wikipedia.org/wiki/Ticker_symbol) identifiers using the RDP the Discovery Symbology Service. I will begin by creating the Type Aliases for the Symbology JSON request message.
-
-
-```
-//rdp_types.ts
-
-// Type for RDP Symbology Lookup request message
-export type PDP_Symbology_Req_Type = {
-    from: RDP_Symbology_From_Type[]
-    to: RDP_Symbology_To_Type[]
-    reference: string[]
-    type: string
-}
-
-// sub-Type for RDP Symbology Lookup request message
-export type RDP_Symbology_From_Type = {
-    identifierTypes: string[]
-    values: string[]
-}
-
-// sub-Type for RDP Symbology Lookup request message
-export type RDP_Symbology_To_Type = {
-    identifierTypes: string[]
-}
-```
 ### Sending Symbology Request with the Fetch API
 
-Next, create a function named ```requestSymbol()``` in the main  ```rdp_nodefetch.ts``` file. This function creates the JSON request message, sends it to RDP via Node native Fetch API, and then returns a response data in JSON message format.
+This example converts a symbol from the RIC Code identifier to [ISIN](https://en.wikipedia.org/wiki/International_Securities_Identification_Number), [LEI](https://en.wikipedia.org/wiki/Legal_Entity_Identifier), and [ExchangeTicker](https://en.wikipedia.org/wiki/Ticker_symbol) identifiers using the RDP the Discovery Symbology Service. I will begin by importing the ```PDP_Symbology_Req_Type``` Type Aliases for the Symbology JSON request message, and creating a function named ```requestSymbol()``` in the main  ```rdp_nodefetch.ts``` file. This function creates the JSON request message, sends it to RDP via Node native Fetch API, and then returns a response data in JSON message format.
 
 ```
 //rdp_nodefetch.ts
@@ -513,5 +503,28 @@ The ```console.table()``` result with the ```newsHeadlineData``` object is as fo
 
 ![figure-3](images/06_news_table.png "News Headlines as table")
 
-That covers all the Node native Fetch API with RDP HTTP REST APIs application development using TypeScript. Please see how to run the project in the [README.md](README.md) file.
+That covers all the Node native Fetch API with RDP HTTP REST APIs application development using TypeScript. 
+
+## Running the example
+
+Please see how to run the project in the [README.md](README.md#how_to_run) file.
+
+## <a id="references"></a>References
+
+For further details, please check out the following resources:
+* [Refinitiv Data Platform APIs page](https://developers.refinitiv.com/en/api-catalog/refinitiv-data-platform/refinitiv-data-platform-apis) on the [Refinitiv Developer Community](https://developers.refinitiv.com/) website.
+* [Refinitiv Data Platform APIs Playground page](https://api.refinitiv.com).
+* [Refinitiv Data Platform APIs: Introduction to the Request-Response API](https://developers.refinitiv.com/en/api-catalog/refinitiv-data-platform/refinitiv-data-platform-apis/tutorials#introduction-to-the-request-response-api).
+* [Refinitiv Data Platform APIs: Authorization - All about tokens](https://developers.refinitiv.com/en/api-catalog/refinitiv-data-platform/refinitiv-data-platform-apis/tutorials#authorization-all-about-tokens).
+* [Limitations and Guidelines for the RDP Authentication Service](https://developers.refinitiv.com/en/article-catalog/article/limitations-and-guidelines-for-the-rdp-authentication-service) article.
+* [Getting Started with Refinitiv Data Platform](https://developers.refinitiv.com/en/article-catalog/article/getting-start-with-refinitiv-data-platform) article.
+* [Node version 18.0.0](https://nodejs.org/en/blog/release/v18.0.0/) page.
+* [Typescript TSC](https://www.typescriptlang.org/docs/handbook/compiler-options.html) page.
+* [TypeScript Handbook](https://www.typescriptlang.org/docs/handbook/intro.html) page.
+* [The Fetch API is finally coming to Node.js](https://blog.logrocket.com/fetch-api-node-js/) blog post.
+* [Node.js 18 available with Fetch API enabled by default](https://sdtimes.com/softwaredev/node-js-18-available-with-fetch-api-enabled-by-default/) news.
+* [VS Code: Developing inside a Container](https://code.visualstudio.com/docs/remote/containers) page.
+* [VS Code: Remote development in Containers tutorial](https://code.visualstudio.com/docs/remote/containers-tutorial) page.
+
+For any questions related to Refinitiv Data Platform APIs, please use the [RDP APIs Forum](https://community.developers.refinitiv.com/spaces/231/index.html) on the [Developers Community Q&A page](https://community.developers.refinitiv.com/).
 

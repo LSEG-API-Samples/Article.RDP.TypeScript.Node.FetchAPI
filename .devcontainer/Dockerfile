@@ -1,5 +1,5 @@
 # Dockerfile for the devcontainer
-# Builder stage, for building the source code only
+# This image is for building a devcontainer only
 ARG NODE_VERSION=18.0.0
 ARG VARIANT=bullseye
 FROM node:${NODE_VERSION}-${VARIANT}
@@ -18,5 +18,4 @@ RUN apt-get update \
 RUN npm install -g npm@8.7.0 
 
 #Run default shell
-#CMD ["/bin/sh"]
 CMD ["/bin/bash"]

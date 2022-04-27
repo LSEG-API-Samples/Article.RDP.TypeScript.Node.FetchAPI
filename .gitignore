@@ -3,5 +3,3 @@ dist/
 .env
 .env.devcontainer
 .devcontainer/.env.devcontainer
-applenews.json
-symbology.json
