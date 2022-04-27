@@ -162,7 +162,7 @@ If you want to run the example with a Docker container manually, please follow t
 
 ## <a id="summary"></a>Summary
 
-The coming of the native Fetch API on Node.js is good news for all developers. This built-in API improves cross-platform familiarity for JavaScript/TypeScript developers, they do need to use a different approach for the frontend (web browsers) and backend (Node.js) HTTP request code. This helps simplify the project and reduce the complexity of using and managing the 3rd party HTTP Request/Fetch modules. 
+The coming of the native Fetch API on Node.js is good news for all developers. This built-in API improves cross-platform familiarity for JavaScript/TypeScript developers, they do need to use a different approach for the frontend (web browsers) and backend (Node.js) HTTP request code anymore. This helps simplify the project and reduce the complexity of managing the 3rd party HTTP Request/Fetch modules. 
 
 At the same time, the [Refinitiv Data Platform (RDP) APIs](https://developers.refinitiv.com/en/api-catalog/refinitiv-data-platform/refinitiv-data-platform-apis) provide various Refinitiv data and content for developers via easy-to-use Web-based API. The APIs are easy to integrate into any application and platform that supports the HTTP protocol and JSON message format. 
 

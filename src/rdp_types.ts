@@ -52,7 +52,7 @@ export type RDP_NewsHeadlines_Table_Type = {
 export type RDP_NewsHeadlines_Data_Type = {
     storyId: string
     title: string
-    versionCreated: string
+    versionCreated?: string
 }
 
 // Type for RDP Symbology Table data

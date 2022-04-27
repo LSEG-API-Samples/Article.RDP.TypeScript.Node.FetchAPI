@@ -237,7 +237,7 @@ const displayNewsHeadlines = (newsJSON:any) => {
         newsHeadlinesTable['data'].push({
             'storyId': headline['storyId'],
             'title': newsItem['itemMeta']['title'][0]['$'],
-            'versionCreated': newsItem['itemMeta']['versionCreated']['$']
+            //'versionCreated': newsItem['itemMeta']['versionCreated']['$']
         })
     })
     console.table(newsHeadlinesTable['data'])
@@ -267,9 +267,6 @@ const displaySymbology = (symbologyJSON:any) => {
     console.log(`Input Symbol = ${symbologyData[0]['input'][0]['value']} type = ${symbologyData[0]['input'][0]['identifierType']}`)
     console.log('Converted Identifiers:')
     console.table(symbologyTable['data'])
-
-   
-    
 }
 
 // ---------------- Main Function ---------------------------------------- //

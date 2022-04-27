@@ -447,7 +447,7 @@ main()
 ```
 ### Displaying News Headline Data
 
-Turning to display incoming news headline data in a readable-tabular format. I will begin by creating the new Type Aliases for the news headline table object named ```newsHeadlinesTable```. This object keeps the necessary output data which are ```storyId```, ```title``` (headline text), and ```versionCreated``` fields from the response JSON message.
+Turning to display incoming news headline data in a readable-tabular format. I will begin by creating the new Type Aliases for the news headline table object named ```newsHeadlinesTable```. This object keeps the necessary output data which are ```storyId```, and ```title``` (headline text) fields from the response JSON message.
 
 ```
 //rdp_types.ts
@@ -461,7 +461,6 @@ export type RDP_NewsHeadlines_Table_Type = {
 export type RDP_NewsHeadlines_Data_Type = {
     storyId: string
     title: string
-    versionCreated: string
 }
 ```
 
@@ -486,8 +485,7 @@ const displayNewsHeadlines = (newsJSON:any) => {
 
         newsHeadlinesTable['data'].push({
             'storyId': headline['storyId'],
-            'title': newsItem['itemMeta']['title'][0]['$'],
-            'versionCreated': newsItem['itemMeta']['versionCreated']['$']
+            'title': newsItem['itemMeta']['title'][0]['$']
         })
     })
     console.table(newsHeadlinesTable['data'])
