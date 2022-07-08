@@ -507,6 +507,18 @@ That covers all the Node native Fetch API with RDP HTTP REST APIs application de
 
 ## Running the example
 
+To run the native Fetch API, you can run the native Fetch code as the following examples:
+
+Node version 18.0.0:
+
+```
+$> node app.js 
+```
+Node versions 17.5.0 - 17.9.X:
+```
+$> node --experimental-fetch app.js 
+```
+
 Please see how to run the project in the [README.md](README.md#how_to_run) file.
 
 ## <a id="references"></a>References

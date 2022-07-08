@@ -9,12 +9,12 @@ ALL EXAMPLE CODE IS PROVIDED ON AN “AS IS” AND “AS AVAILABLE” BASIS FOR 
 
 ## <a id="intro"></a>Introduction
 
-The [Fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API) provides an interface for fetching resources asynchronously across the network using Promise. The Fetch API is wildly used by the frontend web developers for a while, but the [Node.js](https://nodejs.org/en/) just added this API as an experimental feature with Node version 17.5.0 on February 2022 for the backend developers. 
+The [Fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API) provides an interface for fetching resources asynchronously across the network using Promise. The Fetch API is wildly used by the frontend web developers for a while, but the [Node.js](https://nodejs.org/en/) just added this API as an experimental feature with Node version 17.5.0 in February 2022 for the backend developers.
 
 This example project shows how to use the Node.js experimental native Fetch API with the [Refinitiv Data Platform (RDP) APIs](https://developers.refinitiv.com/en/api-catalog/refinitiv-data-platform/refinitiv-data-platform-apis) as the example HTTP REST APIs. The application source codes are implemented in the [TypeScript](https://www.typescriptlang.org) language, and then run the application in a controlled environment such as [Docker](https://www.docker.com/) and [devcontainer](https://code.visualstudio.com/docs/remote/containers) using the [Node Docker Image](https://hub.docker.com/_/node). This helps to avoid mess-up your local development environment when experimenting with this feature.
 
 **Note**:
-Please be informed that this demo projects aim for Development and POC purposes only. The native Fetch API is still an experimental feature (**As of April 2022**) and is not recommended for Production use.
+Please be informed that this demo project aims for Development and POC purposes only. The native Fetch API is still an experimental feature (**As of April 2022**) and is not recommended for Production use.
 
 ## <a id="intro_fetch"></a>Node native Fetch API Overview
 
@@ -35,7 +35,7 @@ async function getData() {
 }
 ```
 
-While the frontend JavaScript web developers have been using the Fetch API since 2015, the API has not been included in [Node.js](https://nodejs.org/en/) runtime environment. The backend JavaScript developers need to use the other libraries such as [the deprecated request module](https://www.npmjs.com/package/request), [postman-request](https://www.npmjs.com/package/postman-request), [axios](https://www.npmjs.com/package/axios), [Node Fetch module](https://www.npmjs.com/package/node-fetch), etc to make the HTTP request with Promise on Node server environment.
+While the frontend JavaScript web developers have been using the Fetch API since 2015, the API has not been included in the [Node.js](https://nodejs.org/en/) runtime environment. The backend JavaScript developers need to use the other libraries such as [the deprecated request module](https://www.npmjs.com/package/request), [postman-request](https://www.npmjs.com/package/postman-request), [Axios](https://www.npmjs.com/package/axios), [Node Fetch module](https://www.npmjs.com/package/node-fetch), etc to make the HTTP request with Promise on the Node server environment.
 
 Introduction in [Node version 17.5.0](https://nodejs.org/en/blog/release/v17.5.0/), the **native Fetch API** is now available as an **experimental feature** (thanks to [Undici](https://undici.nodejs.org/#/)). The [Node version 18.0.0](https://nodejs.org/en/blog/release/v18.0.0/) also enables this experimental fetch API  on the global scope by default. The backend JavaScript developers do not need to install extra fetch-like modules anymore. The frontend developers will be familiar with the server-side HTTP request code in Node.js. 
 
@@ -57,9 +57,9 @@ $> node --experimental-fetch app.js //node 17.5.0
 
 This example project is focusing on Node version 18.0.0.  
 
-### <a id="whatis_rdp"></a>What is Refinitiv Data Platform (RDP) APIs?
+### <a id="whatis_rdp"></a>What are Refinitiv Data Platform (RDP) APIs?
 
-The [Refinitiv Data Platform (RDP) APIs](https://developers.refinitiv.com/en/api-catalog/refinitiv-data-platform/refinitiv-data-platform-apis) provide various Refinitiv data and content for developers via easy to use Web-based API.
+The [Refinitiv Data Platform (RDP) APIs](https://developers.refinitiv.com/en/api-catalog/refinitiv-data-platform/refinitiv-data-platform-apis) provide various Refinitiv data and content for developers via easy-to-use Web-based API.
 
 RDP APIs give developers seamless and holistic access to all of the Refinitiv content such as Historical Pricing, Environmental Social and Governance (ESG), News, Research, etc, and commingled with their content, enriching, integrating, and distributing the data through a single interface, delivered wherever they need it.  The RDP APIs delivery mechanisms are the following:
 * Request - Response: RESTful web service (HTTP GET, POST, PUT or DELETE) 
@@ -69,7 +69,7 @@ RDP APIs give developers seamless and holistic access to all of the Refinitiv co
 
 This example project is focusing on the Request-Response: RESTful web service delivery method only.  
 
-For more detail regarding Refinitiv Data Platform, please see the following APIs resources: 
+For more detail regarding the Refinitiv Data Platform, please see the following APIs resources: 
 - [Quick Start](https://developers.refinitiv.com/en/api-catalog/refinitiv-data-platform/refinitiv-data-platform-apis/quick-start) page.
 - [Tutorials](https://developers.refinitiv.com/en/api-catalog/refinitiv-data-platform/refinitiv-data-platform-apis/tutorials) page.
 - [RDP APIs: Introduction to the Request-Response API](https://developers.refinitiv.com/en/api-catalog/refinitiv-data-platform/refinitiv-data-platform-apis/tutorials#introduction-to-the-request-response-api) page.
@@ -83,7 +83,7 @@ This demo project requires the following dependencies software.
 4. [VS Code - Remote Development extension pack](https://aka.ms/vscode-remote/download/extension)
 5. Internet connection.
 
-Please contact your Refinitiv representative to help you to access the RDP account and services. You can find more detail regarding the RDP access credentials set up from the lease see the *Getting Started for User ID* section of [Getting Start with Refinitiv Data Platform](https://developers.refinitiv.com/en/article-catalog/article/getting-start-with-refinitiv-data-platform) article.
+Please contact your Refinitiv representative to help you to access the RDP account and services. You can find more detail regarding the RDP access credentials set up from the lease see the *Getting Started for User ID* section of the [Getting Start with Refinitiv Data Platform](https://developers.refinitiv.com/en/article-catalog/article/getting-start-with-refinitiv-data-platform) article.
 
 ## <a id="devcontainer_detail"></a>Example Development Detail
 
@@ -134,7 +134,7 @@ Now VS Code is ready for the RDP-TypeScript native Fetch API example inside this
 If you want to run the example with a Docker container manually, please follow the steps below.
 
 1. Start Docker
-2. create a file name ```.env``` in a *project folder root* folder with the following content.
+2. create a file name ```.env``` in a *project root* folder with the following content.
     ```
     RDP_BASE_URL=https://api.refinitiv.com
     RDP_AUTH_URL=/auth/oauth2/v1/token
@@ -164,7 +164,7 @@ If you want to run the example with a Docker container manually, please follow t
 
 The coming of the native Fetch API on Node.js is good news for all developers. This built-in API improves cross-platform familiarity for JavaScript/TypeScript developers, they do need to use a different approach for the frontend (web browsers) and backend (Node.js) HTTP request code anymore. This helps simplify the project and reduce the complexity of managing the 3rd party HTTP Request/Fetch modules. 
 
-At the same time, the [Refinitiv Data Platform (RDP) APIs](https://developers.refinitiv.com/en/api-catalog/refinitiv-data-platform/refinitiv-data-platform-apis) provide various Refinitiv data and content for developers via easy-to-use Web-based API. The APIs are easy to integrate into any application and platform that supports the HTTP protocol and JSON message format. 
+At the same time, the [Refinitiv Data Platform (RDP) APIs](https://developers.refinitiv.com/en/api-catalog/refinitiv-data-platform/refinitiv-data-platform-apis) provide various Refinitiv data and content for developers via an easy-to-use Web-based API. The APIs are easy to integrate into any application and platform that supports the HTTP protocol and JSON message format. 
 
 Let me remind you again, this demo projects aim for Development and POC purposes only. The native Fetch API is still an experimental feature (**As of April 2022**) and is **not recommended for Production use**.
 
