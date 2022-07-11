@@ -12,11 +12,13 @@
 import yargs from 'yargs'
 import { hideBin } from 'yargs/helpers'
 // Importing Types
-import { RDP_AuthToken_Type} from './rdp_types'
-import { PDP_Symbology_Req_Type} from './rdp_types'
-import { RDP_AuthRevoke_Type} from './rdp_types'
-import { RDP_NewsHeadlines_Table_Type } from './rdp_types'
-import { RDP_Symbology_Table_Type } from './rdp_types'
+import { RDP_AuthToken_Type, 
+    PDP_Symbology_Req_Type, 
+    RDP_AuthRevoke_Type, 
+    RDP_NewsHeadlines_Table_Type ,
+    RDP_Symbology_Table_Type 
+} from './rdp_types'
+
 
 // RDP APIs endpoints
 const rdpServer: string = process.env.RDP_BASE_URL || ''
