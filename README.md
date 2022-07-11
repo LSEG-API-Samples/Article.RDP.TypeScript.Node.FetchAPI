@@ -1,6 +1,6 @@
 # Experiment Node.js native Fetch API with Refinitiv Data Platform APIs using TypeScript
 - version: 1.0
-- Last update: April 2022
+- Last update: July, 2022
 - Environment: Node.js, TypeScript, and Docker
 - Prerequisite: [Access to RDP credentials](#prerequisite)
 
@@ -76,7 +76,7 @@ For more detail regarding the Refinitiv Data Platform, please see the following 
 - [RDP APIs: Authorization - All about tokens](https://developers.refinitiv.com/en/api-catalog/refinitiv-data-platform/refinitiv-data-platform-apis/tutorials#authorization-all-about-tokens) page.
 
 ## <a id="prerequisite"></a>Prerequisite
-This demo project requires the following dependencies software.
+This demo project requires the following dependencies.
 1. RDP Access credentials.
 2. [Visual Studio Code](https://code.visualstudio.com/) editor.
 3. [Docker Desktop/Engine](https://docs.docker.com/get-docker/) application.
@@ -96,11 +96,11 @@ This example project contains the following files and folders
 3. *.devcontainer/.env.devcontainer.example*: An example ```.env.devcontainer``` file.
 4. *.vscode*: VS Code debugging configurations for compiling and running the example in VS Code devcontainer.
 5. *src*: The TypeScript source code folder.
-5. *images*: Project images folder.
-6. *LICENSE.md*: Project's license file.
-7. *README.md*: Project's README file.
-8. *Dockerfile*: Project standalone Dockerfile. 
-9. *.env.example*: Project standalone example ```.env``` file. 
+6. *images*: Project images folder.
+7. *LICENSE.md*: Project's license file.
+8. *README.md*: Project's README file.
+9. *Dockerfile*: Project standalone Dockerfile. 
+10. *.env.example*: Project standalone example ```.env``` file. 
 
 ## <a id="how_to_run"></a>How to run the Examples
 
