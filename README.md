@@ -186,3 +186,8 @@ For further details, please check out the following resources:
 * [VS Code: Remote development in Containers tutorial](https://code.visualstudio.com/docs/remote/containers-tutorial) page.
 
 For any questions related to Refinitiv Data Platform APIs, please use the [RDP APIs Forum](https://community.developers.refinitiv.com/spaces/231/index.html) on the [Developers Community Q&A page](https://community.developers.refinitiv.com/).
+
+## Developers Articles
+
+* [Testing Node native Fetch API with Refinitiv Data Platform APIs using TypeScript](https://developers.refinitiv.com/en/article-catalog/article/testing-node-native-fetch-api-with-rdp-tyepscript) article.
+* [Experimenting Node.js native Fetch API using TypeScript](https://wasin-waeosri.medium.com/experimenting-node-js-native-fetch-api-using-typescript-c5275f8a7592) Medium post.
