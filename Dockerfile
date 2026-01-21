@@ -1,7 +1,7 @@
 # Builder stage, for building the source code only
 ARG NODE_VERSION=18.0.0
 ARG VARIANT=alpine3.15
-FROM node:${NODE_VERSION}-${VARIANT} as builder
+FROM docker.io/node:${NODE_VERSION}-${VARIANT} as builder
 LABEL maintainer="Developer Advocate"
 
 # Create app directory
@@ -14,7 +14,9 @@ COPY tsconfig.json .
 # Copy source
 COPY src ./src
 #RUN npm install
-RUN npm install -g npm@8.7.0 \
+RUN npm config set strict-ssl false\
+    && npm config set registry http://registry.npmjs.org/ \
+    && npm install -g npm@8.7.0 \
     && npm ci \
     && npm cache clean --force
 # Build app
@@ -36,7 +38,9 @@ COPY --from=builder /app/package*.json .
 COPY --from=builder /app/tsconfig.json .
 
 #RUN npm install with Production flag
-RUN npm install -g npm@8.7.0 \
+RUN npm config set strict-ssl false\
+    && npm config set registry http://registry.npmjs.org/ \
+    && npm install -g npm@8.7.0 \
     && npm ci --production\
     && npm cache clean --force
 
