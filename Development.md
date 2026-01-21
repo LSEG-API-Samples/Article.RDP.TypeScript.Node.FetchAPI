@@ -1,20 +1,22 @@
-# Experiment Node.js native Fetch API with Refinitiv Data Platform APIs using TypeScript
-- version: 1.0
-- Last update: April 2022
+# Experiment Node.js native Fetch API with Data Platform APIs using TypeScript
+- version: 1.5
+- Last update: January 2026
 - Environment: Docker
 - Prerequisite: [Access to RDP credentials](#prerequisite)
 
 Example Code Disclaimer:
-ALL EXAMPLE CODE IS PROVIDED ON AN “AS IS” AND “AS AVAILABLE” BASIS FOR ILLUSTRATIVE PURPOSES ONLY. REFINITIV MAKES NO REPRESENTATIONS OR WARRANTIES OF ANY KIND, EXPRESS OR IMPLIED, AS TO THE OPERATION OF THE EXAMPLE CODE, OR THE INFORMATION, CONTENT, OR MATERIALS USED IN CONNECTION WITH THE EXAMPLE CODE. YOU EXPRESSLY AGREE THAT YOUR USE OF THE EXAMPLE CODE IS AT YOUR SOLE RISK.
+ALL EXAMPLE CODE IS PROVIDED ON AN “AS IS” AND “AS AVAILABLE” BASIS FOR ILLUSTRATIVE PURPOSES ONLY. LSEG MAKES NO REPRESENTATIONS OR WARRANTIES OF ANY KIND, EXPRESS OR IMPLIED, AS TO THE OPERATION OF THE EXAMPLE CODE, OR THE INFORMATION, CONTENT, OR MATERIALS USED IN CONNECTION WITH THE EXAMPLE CODE. YOU EXPRESSLY AGREE THAT YOUR USE OF THE EXAMPLE CODE IS AT YOUR SOLE RISK.
 
 ## <a id="intro"></a>Introduction
 
-The [Fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API) provides an interface for fetching resources asynchronously across the network using Promise. The Fetch API is wildly used by the frontend web developers for a while, but the [Node.js](https://nodejs.org/en/) just added this API as an experimental feature with Node version 17.5.0 on February 2022 for the backend developers. 
+**Last Updated**: January 2026 
 
-This example project shows how to use the Node.js experimental native Fetch API with the [Refinitiv Data Platform (RDP) APIs](https://developers.refinitiv.com/en/api-catalog/refinitiv-data-platform/refinitiv-data-platform-apis) as the example HTTP REST APIs. The application source codes are implemented in the [TypeScript](https://www.typescriptlang.org) language, and then run the application in a controlled environment such as [Docker](https://www.docker.com/) and [devcontainer](https://code.visualstudio.com/docs/remote/containers) using the [Node Docker Image](https://hub.docker.com/_/node). This helps to avoid mess-up your local development environment when experimenting with this feature.
+The [Fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API) provides an interface for fetching resources asynchronously across the network using Promise. The Fetch API is wildly used by the frontend web developers for a while, but the [Node.js](https://nodejs.org/en/) just added this API as an experimental feature with Node version 17.5.0 in February 2022 for the backend developers
+
+This example project shows how to use the Node.js experimental native Fetch API with the [Data Platform (RDP) APIs](https://developers.lseg.com/en/api-catalog/refinitiv-data-platform/refinitiv-data-platform-apis) (aka Delivery Platform) as the example HTTP REST APIs. The application source codes are implemented in the [TypeScript](https://www.typescriptlang.org) language, and then run the application in a controlled environment such as [Docker](https://www.docker.com/) and [devcontainer](https://code.visualstudio.com/docs/remote/containers) using the [Node Docker Image](https://hub.docker.com/_/node). This helps to avoid mess-up your local development environment when experimenting with this feature.
 
 **Note**:
-Please be informed that this demo projects aim for Development and POC purposes only. The native Fetch API is still an experimental feature (**As of April 2022**) and is not recommended for Production use.
+Please be informed that this demo project aims for Development and POC purposes only. [NodeJS](https://nodejs.org/) Fetch API was stable since version 21. **As of January 2026**, the Node LTS version is 24.x.
 
 ## <a id="code_structure"></a>Example Code Structure
 
@@ -28,7 +30,7 @@ Type Aliases is one of [TypeScript Object Types](https://www.typescriptlang.org/
 
 This example project defines all Type Aliases for the RDP API's JSON request messages (for Auth and Symbology Discover services) and objects used by the application in the ```rdp_types.ts``` file.
 
-```
+```typescript
 //rdp_types.ts
 
 // Type for RDP Auth Token (v1) request message
@@ -55,7 +57,7 @@ export type PDP_Symbology_Req_Type = {
 
 ## <a id="rdp_workflow"></a>RDP APIs Application Workflow
 
-Refinitiv Data Platform entitlement check is based on OAuth 2.0 specification. The first step of an application workflow is to get a token from RDP Auth Service, which will allow access to the protected resource, i.e. data REST API's. 
+Data Platform entitlement check is based on OAuth 2.0 specification. The first step of an application workflow is to get a token from RDP Auth Service, which will allow access to the protected resource, i.e. data REST API's. 
 
 The API requires the following access credential information:
 - Username: The username. 
@@ -63,8 +65,8 @@ The API requires the following access credential information:
 - Client ID: This is also known as ```AppKey```, and it is generated using an App key Generator. This unique identifier is defined for the user or application and is deemed confidential (not shared between users). The client_id parameter can be passed in the request body or as an “Authorization” request header that is encoded as base64.
 
 Next, after the application received the Access Token (and authorization token) from RDP Auth Service, all subsequent REST API calls will use this token to get the data. Please find more detail regarding RDP APIs workflow in the following resources:
-- [RDP APIs: Introduction to the Request-Response API](https://developers.refinitiv.com/en/api-catalog/refinitiv-data-platform/refinitiv-data-platform-apis/tutorials#introduction-to-the-request-response-api) page.
-- [RDP APIs: Authorization - All about tokens](https://developers.refinitiv.com/en/api-catalog/refinitiv-data-platform/refinitiv-data-platform-apis/tutorials#authorization-all-about-tokens) page.
+- [RDP APIs: Introduction to the Request-Response API](https://developers.lseg.com/en/api-catalog/refinitiv-data-platform/refinitiv-data-platform-apis/tutorials#introduction-to-the-request-response-api) page.
+- [RDP APIs: Authorization - All about tokens](https://developers.lseg.com/en/api-catalog/refinitiv-data-platform/refinitiv-data-platform-apis/tutorials#authorization-all-about-tokens) page.
 
 ## <a id="rdp_authen"></a>RDP APIs Authentication
 
@@ -72,7 +74,7 @@ Next, after the application received the Access Token (and authorization token) 
 
 Firstly, we import and crate all necessary types, objects, and variables for the API endpoints and credentials in the main application ```rdp_nodefetch.ts``` file. 
 
-```
+```typescript
 //rdp_nodefetch.ts
 
 // Importing Types
@@ -111,7 +113,7 @@ Please note that the API endpoints and credentials will be assigned to the appli
 
 Then we create a function named ```authenRDP``` to send a login request message to the RDP Auth Token service. The function creates the JSON request message from the ```RDP_AuthToken_Type``` Type and then sends it to the RDP via Node native Fetch API as an HTTP POST message.
 
-```
+```typescript
 //rdp_nodefetch.ts
 
 // Send HTTP Post request to get Access Token (Password Grant and Refresh Grant) from RDP Auth Service
@@ -189,7 +191,7 @@ Please note that Node.js may show the **ExperimentalWarning: The Fetch API is an
 
 Before the session expires, the application needs to send a Refresh Grant request message to get a new access token. Let' us modify the ```authenRDP()``` function to support the Refresh Grant request too.
 
-```
+```typescript
 //rdp_nodefetch.ts
 
 // Send HTTP Post request to get Access Token (Password Grant and Refresh Grant) from RDP Auth Service
@@ -233,7 +235,7 @@ const setRefreshTime = () => {
 ```
 
 Now the example application supports both the Password Grant and Refresh Grant scenarios for the RDP APIs with a single ```authenRDP()``` function. You can find more detail about the Password and Refresh grants limitation in the following article.
-* [Limitations and Guidelines for the RDP Authentication Service](https://developers.refinitiv.com/en/article-catalog/article/limitations-and-guidelines-for-the-rdp-authentication-service) article.
+* [Limitations and Guidelines for the RDP Authentication Service](https://developers.lseg.com/en/article-catalog/article/limitations-and-guidelines-for-the-rdp-authentication-service) article.
 
 That covers the authentication part.
 
@@ -245,7 +247,7 @@ That brings us to requesting the RDP APIs data. All subsequent REST API calls us
 
 Please notice *the space* between the ```Bearer``` and ```RDP Access Token``` values.
 
-The application then creates a request message in a JSON message format or URL query parameter based on the interested service and sends it as an HTTP request message to the Service Endpoint. Developers can get RDP APIs the Service Endpoint, HTTP operations, and parameters from Refinitiv Data Platform's [API Playground page](https://api.refinitiv.com/) - which is an interactive documentation site developers can access once they have a valid Refinitiv Data Platform account.
+The application then creates a request message in a JSON message format or URL query parameter based on the interested service and sends it as an HTTP request message to the Service Endpoint. Developers can get RDP APIs the Service Endpoint, HTTP operations, and parameters from Data Platform's [API Playground page](https://apidocs.refinitiv.com/Apps/ApiDocs) - which is an interactive documentation site developers can access once they have a valid Data Platform account.
 
 This project covers the following the RDP APIs Services:
 - Discovery Symbology Service ```/lookup``` endpoint that navigates between identifiers.
@@ -257,7 +259,7 @@ This project covers the following the RDP APIs Services:
 
 This example converts a symbol from the RIC Code identifier to [ISIN](https://en.wikipedia.org/wiki/International_Securities_Identification_Number), [LEI](https://en.wikipedia.org/wiki/Legal_Entity_Identifier), and [ExchangeTicker](https://en.wikipedia.org/wiki/Ticker_symbol) identifiers using the RDP the Discovery Symbology Service. I will begin by importing the ```PDP_Symbology_Req_Type``` Type Aliases for the Symbology JSON request message, and creating a function named ```requestSymbol()``` in the main  ```rdp_nodefetch.ts``` file. This function creates the JSON request message, sends it to RDP via Node native Fetch API, and then returns a response data in JSON message format.
 
-```
+```typescript
 //rdp_nodefetch.ts
 
 // Importing Types
@@ -321,7 +323,7 @@ The next step is displaying incoming Symbology data in a readable format. The ap
 
 Let's start by creating the new Type Aliases for the Symbology table object named ```symbologyTable```. This object keeps the necessary output data which are ```identifierType```, ```value```, ```name```, and ```status``` fields from the response JSON message.
 
-```
+```typescript
 //rdp_types.ts
 
 // Type for RDP Symbology Table data
@@ -340,7 +342,7 @@ export type RDP_Symbology_Data_Type = {
 
 Finally, we create a ```displaySymbology()``` function to construct the ```symbologyTable``` object and then passes it to the ```console.table()``` function.
 
-```
+```typescript
 //rdp_nodefetch.ts
 
 // Importing Types
@@ -397,7 +399,7 @@ That covers the Symbology data conversion part.
 
 Now we come to the RDP News Service code. Let me start by creating a function named ```getNewsHeadlines``` to send the HTTP GET request message to RDP News Service with the native Fetch API. Once the function received response data from RDP, it returns that data in JSON message format.
 
-```
+```typescript
 //rdp_nodefetch.ts
 
 // Request News Headlines Data from RDP News Service
@@ -439,7 +441,7 @@ main()
 
 Turning to display incoming news headline data in a readable-tabular format. I will begin by creating the new Type Aliases for the news headline table object named ```newsHeadlinesTable```. This object keeps the necessary output data which are ```storyId```, and ```title``` (headline text) fields from the response JSON message.
 
-```
+```typescript
 //rdp_types.ts
 
 // Type for RDP News Headline Table data
@@ -456,7 +458,7 @@ export type RDP_NewsHeadlines_Data_Type = {
 
 Finally, we create a ```displayNewsHeadlines()``` function to construct the ```newsHeadlinesTable``` object and then passes it to the ```console.table()``` function.
 
-```
+```typescript
 //rdp_nodefetch.ts
 
 // Importing Types
@@ -511,11 +513,12 @@ To run the native Fetch API, you can run the native Fetch code as the following 
 
 Node version 18.0.0:
 
-```
+```bash
 $> node app.js 
 ```
 Node versions 17.5.0 - 17.9.X:
-```
+
+```bash
 $> node --experimental-fetch app.js 
 ```
 
@@ -524,12 +527,13 @@ Please see how to run the project in the [README.md](README.md#how_to_run) file.
 ## <a id="references"></a>References
 
 For further details, please check out the following resources:
-* [Refinitiv Data Platform APIs page](https://developers.refinitiv.com/en/api-catalog/refinitiv-data-platform/refinitiv-data-platform-apis) on the [Refinitiv Developer Community](https://developers.refinitiv.com/) website.
-* [Refinitiv Data Platform APIs Playground page](https://api.refinitiv.com).
-* [Refinitiv Data Platform APIs: Introduction to the Request-Response API](https://developers.refinitiv.com/en/api-catalog/refinitiv-data-platform/refinitiv-data-platform-apis/tutorials#introduction-to-the-request-response-api).
-* [Refinitiv Data Platform APIs: Authorization - All about tokens](https://developers.refinitiv.com/en/api-catalog/refinitiv-data-platform/refinitiv-data-platform-apis/tutorials#authorization-all-about-tokens).
-* [Limitations and Guidelines for the RDP Authentication Service](https://developers.refinitiv.com/en/article-catalog/article/limitations-and-guidelines-for-the-rdp-authentication-service) article.
-* [Getting Started with Refinitiv Data Platform](https://developers.refinitiv.com/en/article-catalog/article/getting-start-with-refinitiv-data-platform) article.
+
+* [Data Platform APIs page](https://developers.lseg.com/en/api-catalog/refinitiv-data-platform/refinitiv-data-platform-apis) on the [LSEG Developer Community](https://developers.lseg.com/) website.
+* [Data Platform APIs Playground page](https://api.refinitiv.com).
+* [Data Platform APIs: Introduction to the Request-Response API](https://developers.lseg.com/en/api-catalog/refinitiv-data-platform/refinitiv-data-platform-apis/tutorials#introduction-to-the-request-response-api).
+* [Data Platform APIs: Authorization - All about tokens](https://developers.lseg.com/en/api-catalog/refinitiv-data-platform/refinitiv-data-platform-apis/tutorials#authorization-all-about-tokens).
+* [Limitations and Guidelines for the RDP Authentication Service](https://developers.lseg.com/en/article-catalog/article/limitations-and-guidelines-for-the-rdp-authentication-service) article.
+* [Getting Started with Data Platform](https://developers.lseg.com/en/article-catalog/article/getting-start-with-refinitiv-data-platform) article.
 * [Node version 18.0.0](https://nodejs.org/en/blog/release/v18.0.0/) page.
 * [Typescript TSC](https://www.typescriptlang.org/docs/handbook/compiler-options.html) page.
 * [TypeScript Handbook](https://www.typescriptlang.org/docs/handbook/intro.html) page.
@@ -538,5 +542,5 @@ For further details, please check out the following resources:
 * [VS Code: Developing inside a Container](https://code.visualstudio.com/docs/remote/containers) page.
 * [VS Code: Remote development in Containers tutorial](https://code.visualstudio.com/docs/remote/containers-tutorial) page.
 
-For any questions related to Refinitiv Data Platform APIs, please use the [RDP APIs Forum](https://community.developers.refinitiv.com/spaces/231/index.html) on the [Developers Community Q&A page](https://community.developers.refinitiv.com/).
+For any questions related to Data Platform APIs, please use  the [Developers Community Q&A page](https://community.developers.refinitiv.com/).
 

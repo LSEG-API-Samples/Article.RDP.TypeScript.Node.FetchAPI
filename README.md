@@ -1,20 +1,22 @@
-# Experiment Node.js native Fetch API with Refinitiv Data Platform APIs using TypeScript
-- version: 1.0
-- Last update: July, 2022
+# Experiment Node.js native Fetch API with Data Platform APIs using TypeScript
+- version: 1.5
+- Last update: January 2026
 - Environment: Node.js, TypeScript, and Docker
 - Prerequisite: [Access to RDP credentials](#prerequisite)
 
 Example Code Disclaimer:
-ALL EXAMPLE CODE IS PROVIDED ON AN “AS IS” AND “AS AVAILABLE” BASIS FOR ILLUSTRATIVE PURPOSES ONLY. REFINITIV MAKES NO REPRESENTATIONS OR WARRANTIES OF ANY KIND, EXPRESS OR IMPLIED, AS TO THE OPERATION OF THE EXAMPLE CODE, OR THE INFORMATION, CONTENT, OR MATERIALS USED IN CONNECTION WITH THE EXAMPLE CODE. YOU EXPRESSLY AGREE THAT YOUR USE OF THE EXAMPLE CODE IS AT YOUR SOLE RISK.
+ALL EXAMPLE CODE IS PROVIDED ON AN “AS IS” AND “AS AVAILABLE” BASIS FOR ILLUSTRATIVE PURPOSES ONLY. LSEG MAKES NO REPRESENTATIONS OR WARRANTIES OF ANY KIND, EXPRESS OR IMPLIED, AS TO THE OPERATION OF THE EXAMPLE CODE, OR THE INFORMATION, CONTENT, OR MATERIALS USED IN CONNECTION WITH THE EXAMPLE CODE. YOU EXPRESSLY AGREE THAT YOUR USE OF THE EXAMPLE CODE IS AT YOUR SOLE RISK.
 
 ## <a id="intro"></a>Introduction
 
+**Last Updated**: January 2026 
+
 The [Fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API) provides an interface for fetching resources asynchronously across the network using Promise. The Fetch API is wildly used by the frontend web developers for a while, but the [Node.js](https://nodejs.org/en/) just added this API as an experimental feature with Node version 17.5.0 in February 2022 for the backend developers.
 
-This example project shows how to use the Node.js experimental native Fetch API with the [Refinitiv Data Platform (RDP) APIs](https://developers.refinitiv.com/en/api-catalog/refinitiv-data-platform/refinitiv-data-platform-apis) as the example HTTP REST APIs. The application source codes are implemented in the [TypeScript](https://www.typescriptlang.org) language, and then run the application in a controlled environment such as [Docker](https://www.docker.com/) and [devcontainer](https://code.visualstudio.com/docs/remote/containers) using the [Node Docker Image](https://hub.docker.com/_/node). This helps to avoid mess-up your local development environment when experimenting with this feature.
+This example project shows how to use the Node.js experimental native Fetch API with the [Data Platform (RDP) APIs](https://developers.lseg.com/en/api-catalog/refinitiv-data-platform/refinitiv-data-platform-apis) (aka Delivery Platform) as the example HTTP REST APIs. The application source codes are implemented in the [TypeScript](https://www.typescriptlang.org) language, and then run the application in a controlled environment such as [Docker](https://www.docker.com/) and [devcontainer](https://code.visualstudio.com/docs/remote/containers) using the [Node Docker Image](https://hub.docker.com/_/node). This helps to avoid mess-up your local development environment when experimenting with this feature.
 
 **Note**:
-Please be informed that this demo project aims for Development and POC purposes only. The native Fetch API is still an experimental feature (**As of April 2022**) and is not recommended for Production use.
+Please be informed that this demo project aims for Development and POC purposes only. [NodeJS](https://nodejs.org/) Fetch API was stable since version 21. **As of January 2026**, the Node LTS version is 24.x.
 
 ## <a id="intro_fetch"></a>Node native Fetch API Overview
 
@@ -57,11 +59,11 @@ $> node --experimental-fetch app.js //node 17.5.0
 
 This example project is focusing on Node version 18.0.0.  
 
-### <a id="whatis_rdp"></a>What are Refinitiv Data Platform (RDP) APIs?
+### <a id="whatis_rdp"></a>What are Data Platform (RDP) APIs?
 
-The [Refinitiv Data Platform (RDP) APIs](https://developers.refinitiv.com/en/api-catalog/refinitiv-data-platform/refinitiv-data-platform-apis) provide various Refinitiv data and content for developers via easy-to-use Web-based API.
+The [Data Platform (RDP) APIs](https://developers.lseg.com/en/api-catalog/refinitiv-data-platform/refinitiv-data-platform-apis) provide various LSEG data and content for developers via easy-to-use Web-based API.
 
-RDP APIs give developers seamless and holistic access to all of the Refinitiv content such as Historical Pricing, Environmental Social and Governance (ESG), News, Research, etc, and commingled with their content, enriching, integrating, and distributing the data through a single interface, delivered wherever they need it.  The RDP APIs delivery mechanisms are the following:
+RDP APIs give developers seamless and holistic access to all of the LSEG content such as Historical Pricing, Environmental Social and Governance (ESG), News, Research, etc, and commingled with their content, enriching, integrating, and distributing the data through a single interface, delivered wherever they need it.  The RDP APIs delivery mechanisms are the following:
 * Request - Response: RESTful web service (HTTP GET, POST, PUT or DELETE) 
 * Alert: delivery is a mechanism to receive asynchronous updates (alerts) to a subscription. 
 * Bulks:  deliver substantial payloads, like the end-of-day pricing data for the whole venue. 
@@ -69,11 +71,11 @@ RDP APIs give developers seamless and holistic access to all of the Refinitiv co
 
 This example project is focusing on the Request-Response: RESTful web service delivery method only.  
 
-For more detail regarding the Refinitiv Data Platform, please see the following APIs resources: 
-- [Quick Start](https://developers.refinitiv.com/en/api-catalog/refinitiv-data-platform/refinitiv-data-platform-apis/quick-start) page.
-- [Tutorials](https://developers.refinitiv.com/en/api-catalog/refinitiv-data-platform/refinitiv-data-platform-apis/tutorials) page.
-- [RDP APIs: Introduction to the Request-Response API](https://developers.refinitiv.com/en/api-catalog/refinitiv-data-platform/refinitiv-data-platform-apis/tutorials#introduction-to-the-request-response-api) page.
-- [RDP APIs: Authorization - All about tokens](https://developers.refinitiv.com/en/api-catalog/refinitiv-data-platform/refinitiv-data-platform-apis/tutorials#authorization-all-about-tokens) page.
+For more detail regarding the Data Platform, please see the following APIs resources: 
+- [Quick Start](https://developers.lseg.com/en/api-catalog/refinitiv-data-platform/refinitiv-data-platform-apis/quick-start) page.
+- [Tutorials](https://developers.lseg.com/en/api-catalog/refinitiv-data-platform/refinitiv-data-platform-apis/tutorials) page.
+- [RDP APIs: Introduction to the Request-Response API](https://developers.lseg.com/en/api-catalog/refinitiv-data-platform/refinitiv-data-platform-apis/tutorials#introduction-to-the-request-response-api) page.
+- [RDP APIs: Authorization - All about tokens](https://developers.lseg.com/en/api-catalog/refinitiv-data-platform/refinitiv-data-platform-apis/tutorials#authorization-all-about-tokens) page.
 
 ## <a id="prerequisite"></a>Prerequisite
 This demo project requires the following dependencies.
@@ -83,7 +85,7 @@ This demo project requires the following dependencies.
 4. [VS Code - Remote Development extension pack](https://aka.ms/vscode-remote/download/extension)
 5. Internet connection.
 
-Please contact your Refinitiv representative to help you to access the RDP account and services. You can find more detail regarding the RDP access credentials set up from the lease see the *Getting Started for User ID* section of the [Getting Start with Refinitiv Data Platform](https://developers.refinitiv.com/en/article-catalog/article/getting-start-with-refinitiv-data-platform) article.
+Please contact your LSEG representative to help you to access the RDP account and services. You can find more detail regarding the RDP access credentials set up from the lease see the *Getting Started for User ID* section of the [Getting Start with Data Platform](https://developers.lseg.com/en/article-catalog/article/getting-start-with-refinitiv-data-platform) article.
 
 ## <a id="devcontainer_detail"></a>Example Development Detail
 
@@ -164,19 +166,21 @@ If you want to run the example with a Docker container manually, please follow t
 
 The coming of the native Fetch API on Node.js is good news for all developers. This built-in API improves cross-platform familiarity for JavaScript/TypeScript developers, they do need to use a different approach for the frontend (web browsers) and backend (Node.js) HTTP request code anymore. This helps simplify the project and reduce the complexity of managing the 3rd party HTTP Request/Fetch modules. 
 
-At the same time, the [Refinitiv Data Platform (RDP) APIs](https://developers.refinitiv.com/en/api-catalog/refinitiv-data-platform/refinitiv-data-platform-apis) provide various Refinitiv data and content for developers via an easy-to-use Web-based API. The APIs are easy to integrate into any application and platform that supports the HTTP protocol and JSON message format. 
+At the same time, the [Data Platform (RDP) APIs](https://developers.lseg.com/en/api-catalog/refinitiv-data-platform/refinitiv-data-platform-apis) provide various LSEG data and content for developers via an easy-to-use Web-based API. The APIs are easy to integrate into any application and platform that supports the HTTP protocol and JSON message format. 
 
 Let me remind you again, this demo projects aim for Development and POC purposes only. The native Fetch API is still an experimental feature (**As of April 2022**) and is **not recommended for Production use**.
 
 ## <a id="references"></a>References
 
 For further details, please check out the following resources:
-* [Refinitiv Data Platform APIs page](https://developers.refinitiv.com/en/api-catalog/refinitiv-data-platform/refinitiv-data-platform-apis) on the [Refinitiv Developer Community](https://developers.refinitiv.com/) website.
-* [Refinitiv Data Platform APIs Playground page](https://api.refinitiv.com).
-* [Refinitiv Data Platform APIs: Introduction to the Request-Response API](https://developers.refinitiv.com/en/api-catalog/refinitiv-data-platform/refinitiv-data-platform-apis/tutorials#introduction-to-the-request-response-api).
-* [Refinitiv Data Platform APIs: Authorization - All about tokens](https://developers.refinitiv.com/en/api-catalog/refinitiv-data-platform/refinitiv-data-platform-apis/tutorials#authorization-all-about-tokens).
-* [Limitations and Guidelines for the RDP Authentication Service](https://developers.refinitiv.com/en/article-catalog/article/limitations-and-guidelines-for-the-rdp-authentication-service) article.
-* [Getting Started with Refinitiv Data Platform](https://developers.refinitiv.com/en/article-catalog/article/getting-start-with-refinitiv-data-platform) article.
+
+
+* [Data Platform APIs page](https://developers.lseg.com/en/api-catalog/refinitiv-data-platform/refinitiv-data-platform-apis) on the [LSEG Developer Community](https://developers.lseg.com/) website.
+* [Data Platform APIs Playground page](https://api.refinitiv.com).
+* [Data Platform APIs: Introduction to the Request-Response API](https://developers.lseg.com/en/api-catalog/refinitiv-data-platform/refinitiv-data-platform-apis/tutorials#introduction-to-the-request-response-api).
+* [Data Platform APIs: Authorization - All about tokens](https://developers.lseg.com/en/api-catalog/refinitiv-data-platform/refinitiv-data-platform-apis/tutorials#authorization-all-about-tokens).
+* [Limitations and Guidelines for the RDP Authentication Service](https://developers.lseg.com/en/article-catalog/article/limitations-and-guidelines-for-the-rdp-authentication-service) article.
+* [Getting Started with Data Platform](https://developers.lseg.com/en/article-catalog/article/getting-start-with-refinitiv-data-platform) article.
 * [Node version 18.0.0](https://nodejs.org/en/blog/release/v18.0.0/) page.
 * [Typescript TSC](https://www.typescriptlang.org/docs/handbook/compiler-options.html) page.
 * [TypeScript Handbook](https://www.typescriptlang.org/docs/handbook/intro.html) page.
@@ -185,9 +189,9 @@ For further details, please check out the following resources:
 * [VS Code: Developing inside a Container](https://code.visualstudio.com/docs/remote/containers) page.
 * [VS Code: Remote development in Containers tutorial](https://code.visualstudio.com/docs/remote/containers-tutorial) page.
 
-For any questions related to Refinitiv Data Platform APIs, please use the [RDP APIs Forum](https://community.developers.refinitiv.com/spaces/231/index.html) on the [Developers Community Q&A page](https://community.developers.refinitiv.com/).
+For any questions related to Data Platform APIs, please use  the [Developers Community Q&A page](https://community.developers.refinitiv.com/).
 
 ## Developers Articles
 
-* [Testing Node native Fetch API with Refinitiv Data Platform APIs using TypeScript](https://developers.refinitiv.com/en/article-catalog/article/testing-node-native-fetch-api-with-rdp-tyepscript) article.
+* [Testing Node native Fetch API with Refinitiv Data Platform APIs using TypeScript](https://developers.lseg.com/en/article-catalog/article/testing-node-native-fetch-api-with-rdp-tyepscript) article.
 * [Experimenting Node.js native Fetch API using TypeScript](https://wasin-waeosri.medium.com/experimenting-node-js-native-fetch-api-using-typescript-c5275f8a7592) Medium post.

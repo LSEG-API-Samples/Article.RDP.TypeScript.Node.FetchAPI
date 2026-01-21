@@ -1,7 +1,7 @@
 {
   "name": "test_nodejs_fetch",
-  "version": "1.0.0",
-  "description": "An experimental project to test Node.js native Fetch API using TypeScript and Refinitiv REST APIs",
+  "version": "1.5.0",
+  "description": "An experimental project to test Node.js native Fetch API using TypeScript and LSEG Data Platform REST APIs",
   "main": "src/rdp_nodefetch.ts",
   "scripts": {
     "build": "npx tsc",
