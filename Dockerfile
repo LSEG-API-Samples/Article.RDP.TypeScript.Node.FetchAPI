@@ -1,6 +1,7 @@
 # Builder stage, for building the source code only
-ARG NODE_VERSION=18.0.0
-ARG VARIANT=alpine3.15
+ARG NODE_VERSION=24.13.0
+#ARG VARIANT=bookworm
+ARG VARIANT=alpine3.23
 FROM docker.io/node:${NODE_VERSION}-${VARIANT} as builder
 LABEL maintainer="Developer Advocate"
 
@@ -13,12 +14,18 @@ COPY package*.json .
 COPY tsconfig.json .
 # Copy source
 COPY src ./src
-#RUN npm install
+#RUN npm install in LSEG environment
 RUN npm config set strict-ssl false\
     && npm config set registry http://registry.npmjs.org/ \
     && npm install -g npm@8.7.0 \
     && npm ci \
     && npm cache clean --force
+
+#RUN npm install in Your environment that not blocks NPM registry.
+#RUN npm install -g npm@8.7.0 \
+#    && npm ci \
+#    && npm cache clean --force
+
 # Build app
 RUN npm run build-minify
 
@@ -43,6 +50,11 @@ RUN npm config set strict-ssl false\
     && npm install -g npm@8.7.0 \
     && npm ci --production\
     && npm cache clean --force
+
+#RUN npm install in Your environment that not blocks NPM registry.
+#RUN npm install -g npm@8.7.0 \
+#    && npm ci --production\
+#    && npm cache clean --force
 
 # Copy the bundle file and run script
 COPY --from=builder /app/dist ./dist

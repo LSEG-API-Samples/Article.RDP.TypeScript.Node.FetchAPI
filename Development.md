@@ -507,19 +507,85 @@ The ```console.table()``` result with the ```newsHeadlineData``` object is as fo
 
 That covers all the Node native Fetch API with RDP HTTP REST APIs application development using TypeScript. 
 
-## Running the example
+## A Dockerfile/Containerfile
 
-To run the native Fetch API, you can run the native Fetch code as the following examples:
+This project Dockerfile/Containerfile is as follows:
 
-Node version 18.0.0:
+```dockerfile
+# Builder stage, for building the source code only
+ARG NODE_VERSION=24.13.0
+#ARG VARIANT=bookworm
+ARG VARIANT=alpine3.23
+FROM docker.io/node:${NODE_VERSION}-${VARIANT} as builder
+LABEL maintainer="Developer Advocate"
 
-```bash
-$> node app.js 
+# Create app directory
+WORKDIR /app
+
+# Install app dependencies and build configurations
+# A wildcard is used to ensure both package.json AND package-lock.json are copied
+COPY package*.json .
+COPY tsconfig.json .
+# Copy source
+COPY src ./src
+#RUN npm install
+RUN npm config set strict-ssl false\
+    && npm config set registry http://registry.npmjs.org/ \
+    && npm install -g npm@8.7.0 \
+    && npm ci \
+    && npm cache clean --force
+# Build app
+RUN npm run build-minify
+
+## Second stage, for running the application in a final image.
+
+FROM node:${NODE_VERSION}-${VARIANT}
+
+# Create app directory
+WORKDIR /app
+
+# Set ENV Production 
+
+ENV NODE_ENV production
+
+#COPY configuration files
+COPY --from=builder /app/package*.json .
+COPY --from=builder /app/tsconfig.json .
+
+#RUN npm install with Production flag
+RUN npm config set strict-ssl false\
+    && npm config set registry http://registry.npmjs.org/ \
+    && npm install -g npm@8.7.0 \
+    && npm ci --production\
+    && npm cache clean --force
+
+# Copy the bundle file and run script
+COPY --from=builder /app/dist ./dist
+# Set Docker to run the application with compress mode
+
+ENTRYPOINT [ "node", "./dist/rdp_nodefetch.min.js"]
 ```
-Node versions 17.5.0 - 17.9.X:
 
-```bash
-$> node --experimental-fetch app.js 
+This Dockerfile/Containerfile uses a simple multi-stage build. However, please be noticed the following configurations:
+
+```dockerfile
+#RUN npm install in LSEG environment
+RUN npm config set strict-ssl false\
+    && npm config set registry http://registry.npmjs.org/ \
+```
+
+This configurations disable SSL verification to **workaround LSEG beloved ZScaler** that blocks access to NPM repository. If your environment does not block access NPM repository, you can use just these configurations.
+
+```dockerfile
+#RUN npm install in Your environment that not blocks NPM registry.
+RUN npm install -g npm@8.7.0 \
+    && npm ci \
+    && npm cache clean --force
+...
+#RUN npm install in Your environment that not blocks NPM registry.
+RUN npm install -g npm@8.7.0 \
+    && npm ci --production\
+    && npm cache clean --force
 ```
 
 Please see how to run the project in the [README.md](README.md#how_to_run) file.

@@ -23,7 +23,8 @@ Please be informed that this demo project aims for Development and POC purposes 
 The JavaScript [Fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API) is the modern successor of the [XMLHttpRequest](https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest) API for performing asynchronous HTTP requests. The API is supported by most modern web browsers today. It lets developers implement the HTTP request code using  JavaScript [Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise) which is much simpler than the XMLHttpRequest's callback hell. The example codes are as follows:
 
 Fetch API Promise example code:
-```
+
+```typescript
 fetch('http://example.com')
   .then(response => response.json())
   .then(data => console.log(data));
@@ -42,7 +43,8 @@ While the frontend JavaScript web developers have been using the Fetch API since
 Introduction in [Node version 17.5.0](https://nodejs.org/en/blog/release/v17.5.0/), the **native Fetch API** is now available as an **experimental feature** (thanks to [Undici](https://undici.nodejs.org/#/)). The [Node version 18.0.0](https://nodejs.org/en/blog/release/v18.0.0/) also enables this experimental fetch API  on the global scope by default. The backend JavaScript developers do not need to install extra fetch-like modules anymore. The frontend developers will be familiar with the server-side HTTP request code in Node.js. 
 
 Example code from [Node official page](https://nodejs.org/en/blog/release/v18.0.0/):
-```
+
+```typescript
 const res = await fetch('https://nodejs.org/api/documentation.json');
 if (res.ok) {
   const data = await res.json();
@@ -52,7 +54,7 @@ if (res.ok) {
 
 To run this built-in API, you can run the native Fetch code with the ```--experimental-fetch``` with Node.js 17.5.0 or just a node command with Node.js 18.0.0 when you run the Node application as follow:
 
-```
+```bash
 $> node app.js //node 18.0.0
 $> node --experimental-fetch app.js //node 17.5.0
 ```
@@ -111,7 +113,7 @@ The first step is to unzip or download the example project folder into a directo
 ### <a id="devconainer_run"></a>Running as VS Code DevContainer
 
 1. Go to the project's *.devcontainer* folder and create a file name ```.env.devcontainer```  with the following content.
-    ```
+    ```ini
     RDP_BASE_URL=https://api.refinitiv.com
     RDP_AUTH_URL=/auth/oauth2/v1/token
     RDP_AUTH_REVOKE_URL=/auth/oauth2/v1/revoke
@@ -137,7 +139,7 @@ If you want to run the example with a Docker container manually, please follow t
 
 1. Start Docker
 2. create a file name ```.env``` in a *project root* folder with the following content.
-    ```
+    ```ini
     RDP_BASE_URL=https://api.refinitiv.com
     RDP_AUTH_URL=/auth/oauth2/v1/token
     RDP_AUTH_REVOKE_URL=/auth/oauth2/v1/revoke
@@ -149,15 +151,15 @@ If you want to run the example with a Docker container manually, please follow t
     RDP_APP_KEY=<RDP Client_ID>
     ```
 3. Build a Docker image with the following command:
-    ```
+    ```bash
     $> docker build . -t rdp_test_fetch
     ```
 4. Run a Docker container with the following command: 
-    ```
+    ```bash
     $> docker run -it --name rdp_test_fetch --env-file .env rdp_test_fetch --symbol <RIC> --newslimit <numbers of news limit>
     ```
 5. To stop and delete a Docker container, press ``` Ctrl+C``` (or run ```docker stop rdp_test_fetch```) then run the following command:
-    ```
+    ```bash
     $> docker rm rdp_test_fetch
     ```
 ![figure-3](images/03_run_docker.png "Run with docker")
